@@ -39,7 +39,6 @@ public:
 					}
 				break;}
 			case 'R':{//RES
-				  uint8_t  gainInput;
 					uint16_t temp = 4;
 					if (!Controller::parse_uint8(resolution,temp,command)){
 						controller->getErrorLogger()->println("RES must be followed by a number.");
