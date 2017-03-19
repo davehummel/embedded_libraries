@@ -49,8 +49,6 @@ public:
             return;
           }
         analogReadResolution(resolution);
-				Serial.print("Set Res ");
-				Serial.println(resolution);
 				break;
 			}
 		}
@@ -71,6 +69,7 @@ public:
 			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
 			return 0;
 		}
+		Serial.println(analogRead(pinID[channel]));
 		return analogRead(pinID[channel]);
 	}
 
