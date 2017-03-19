@@ -49,7 +49,7 @@ public:
             return;
           }
         analogReadResolution(resolution);
-				Serial.print("Set Res ")
+				Serial.print("Set Res ");
 				Serial.println(resolution);
 				break;
 			}
