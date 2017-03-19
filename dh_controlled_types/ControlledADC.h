@@ -69,7 +69,6 @@ public:
 			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
 			return 0;
 		}
-		Serial.print("u");
 		return analogRead(pinID[channel]);
 	}
 
@@ -115,7 +114,6 @@ public:
 			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
 			return 0;
 		}
-				Serial.print("b");
 		return analogRead(pinID[channel]);
 	}
 
