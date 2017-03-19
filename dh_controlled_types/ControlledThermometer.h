@@ -85,7 +85,7 @@ public:
 
 	void write(ADDR1 addr,float val){
 		uint8_t num = addr.addr%26;
-		if (num>=0 && num < 10 ){
+		if (num>=0 && num < deviceCount ){
 			deviceOffset[num] = val;
 		}
 	}
