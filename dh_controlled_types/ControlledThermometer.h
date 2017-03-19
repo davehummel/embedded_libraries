@@ -61,7 +61,7 @@ public:
 
 	void execute(uint32_t time,uint32_t id,char command[]){
 		if (id == SCAN_ID && command[0] == 'S'){
-			values[devScan]= readTemp(devScan);
+			values[devScan]= readTemp(devScan) + deviceOffset[devScan];
 			    //  Serial.print("Thermo:");
 					//  Serial.print(deviceAddr[devScan][1],HEX);
 					//  Serial.print("=");
@@ -82,6 +82,14 @@ public:
 	void endSchedule(char command[], uint32_t id){
 
 	}
+
+	void write(ADDR1 addr,float val){
+		uint8_t num = addr.addr%26;
+		if (num>=0 && num < 10 ){
+			deviceOffset[num] = val;
+		}
+	}
+
 
 	float readF(ADDR1 addr,uint8_t addr2){
 			uint8_t num = addr.addr%26;
@@ -135,6 +143,7 @@ private:
 	OneWire* ds;
 	bool scanning = false;
 	byte deviceAddr[10][8];
+	float deviceOffset[10] = {0};
 	uint8_t deviceCount;
 	uint8_t devScan;
   float* values;
