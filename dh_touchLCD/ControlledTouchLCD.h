@@ -50,7 +50,8 @@ public:
 			if (text[pointer]=='.'){
 				pointer++;
 				if (!Controller::parse_uint8(addr2,pointer,text)){
-					Serial.println("Expected addr2 number");
+					  	controller->getErrorLogger()->setParseError(text,pointer,"Expected addr2 number");
+							controller->getErrorLogger()->finished(Controller::lastProcessedMSTime,ErrorLogger::MOD_PARSER);
 					return false;
 				}
 			}else{
@@ -62,8 +63,9 @@ public:
 
 
 			if (module == 0 ){
-				Serial.print("Failed to find controlled module:");
-				Serial.println(addr1.modID);
+				controller->getErrorLogger()->print(text,pointer,"module:");
+				controller->getErrorLogger()->println(addr1.modID);
+				controller->getErrorLogger()->finished(Controller::lastProcessedMSTime,ErrorLogger::MOD_PARSER);
 				return false;
 			}
 			#ifdef DEBUG
@@ -72,8 +74,8 @@ public:
 			return true;
 		}else{
 			if (!Controller::parse_uint16(val,pointer,text)){
-				Serial.print(text[pointer]);
-				Serial.println("Unable to parse number");
+				controller->getErrorLogger()->setParseError(text,pointer,"Unable to parse number");
+				controller->getErrorLogger()->finished(Controller::lastProcessedMSTime,ErrorLogger::MOD_PARSER);
 				return false;
 			}
 			return true;
@@ -149,7 +151,8 @@ public:
 			if (text[pointer]=='.'){
 				pointer++;
 				if (!Controller::parse_uint8(addr2,pointer,text)){
-					Serial.println("Expected addr2 number");
+					controller->getErrorLogger()->setParseError(text,pointer,"Expected addr2 number");
+					controller->getErrorLogger()->finished(Controller::lastProcessedMSTime,ErrorLogger::MOD_PARSER);
 					return false;
 				}
 			}else{

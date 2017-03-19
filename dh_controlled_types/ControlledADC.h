@@ -49,6 +49,8 @@ public:
             return;
           }
         analogReadResolution(resolution);
+				Serial.print("Set Res ")
+				Serial.println(resolution);
 				break;
 			}
 		}
@@ -69,7 +71,42 @@ public:
 			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
 			return 0;
 		}
+		return analogRead(pinID[channel]);
+	}
 
+	int16_t readI(ADDR1 addr,uint8_t addr2){
+		uint8_t channel = addr.addr%26; // A = 0, B = 1, C = 2, D = 3
+		if (pinID[channel]==0){
+			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
+			return 0;
+		}
+		return analogRead(pinID[channel]);
+	}
+
+	uint32_t readL(ADDR1 addr,uint8_t addr2){
+		uint8_t channel = addr.addr%26; // A = 0, B = 1, C = 2, D = 3
+		if (pinID[channel]==0){
+			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
+			return 0;
+		}
+		return analogRead(pinID[channel]);
+	}
+
+	float readF(ADDR1 addr,uint8_t addr2){
+		uint8_t channel = addr.addr%26; // A = 0, B = 1, C = 2, D = 3
+		if (pinID[channel]==0){
+			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
+			return 0;
+		}
+		return analogRead(pinID[channel]);
+	}
+
+	double readD(ADDR1 addr,uint8_t addr2){
+		uint8_t channel = addr.addr%26; // A = 0, B = 1, C = 2, D = 3
+		if (pinID[channel]==0){
+			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
+			return 0;
+		}
 		return analogRead(pinID[channel]);
 	}
 
@@ -79,7 +116,6 @@ public:
 			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
 			return 0;
 		}
-
 		return analogRead(pinID[channel]);
 	}
 
