@@ -63,7 +63,7 @@ public:
 
 
 			if (module == 0 ){
-				controller->getErrorLogger()->print(text,pointer,"module:");
+				controller->getErrorLogger()->print("Unknown module:");
 				controller->getErrorLogger()->println(addr1.modID);
 				controller->getErrorLogger()->finished(Controller::lastProcessedMSTime,ErrorLogger::MOD_PARSER);
 				return false;

@@ -83,7 +83,7 @@ public:
 		return analogRead(pinID[channel]);
 	}
 
-	uint32_t readL(ADDR1 addr,uint8_t addr2){
+	int32_t readL(ADDR1 addr,uint8_t addr2){
 		uint8_t channel = addr.addr%26; // A = 0, B = 1, C = 2, D = 3
 		if (pinID[channel]==0){
 			controller->getErrorLogger()->print("Channel to read must be mapped to a pin number like PIN A 12");
