@@ -3,29 +3,64 @@
 #include "dh_controller.h"
 #include <i2c_t3.h>
 
+// The Arduino two-wire interface uses a 7-bit number for the address,
+// and sets the last bit correctly based on reads and writes
+#define ADDRESS_DEFAULT 0b0101001
+#define SCAN_RATE_DEFAULT 100
+#define SCAN_ID 6751
+
 
 class ControlledVL53L0X: public Controller::Controlled{
 public:
 
+	ControlledVL53L0X(int devCount, uint8_t _pins[]){
+
+		deviceCount = devCount;
+		pins = _pins;
+
+		devices = new VL53L0X[deviceCount]{};
+		values = new uint16_t[deviceCount];
+		goodRead = 	 new uint32_t[deviceCount];
+	}
+
+
 	void begin(void){
 		scanning = false;
+
+
+		for (int i = 0 ; i < deviceCount ; i++){
+			pinMode(pins[i],OUTPUT);
+			digitalWrite(pins[i],LOW);
+		}
+
 	}
 
-	void setWire(i2c_t3* _wire){
-		wire = _wire;
+	void setWire(i2c_t3 *_wire){
+		if (started==true)
+			return;
+
+wire = _wire;
+
 	}
+
 
 	void write(ADDR1 addr,uint8_t val){
-					if (scanning == (val>0))
-						return;
-
-
-					if ((val>0) == false){
-						stopScan();
-					} else {
+					if (val>0){
 						startScan();
+					} else {
+						stopScan();
+					}
+	}
+
+	void write(ADDR1 addr,uint16_t val){
+					if (val <=20){
+						val = 20;
 					}
 
+
+						scanRate = val;
+
+						startScan();
 
 
 	}
@@ -39,66 +74,74 @@ public:
 		if (!scanning)
 			return 0;
 
-		switch(addr.addr%26+'A'){
-				case 'A': return readingA;
-				case 'B': return readingB;
-				default: return -1;
-		}
+			uint8_t id = addr.addr%26;
+
+			if (id>= deviceCount)
+				return 0;
+
+			return values[id];
+
 	}
 
 	void startScan(){
 
 		if (scanning){
 			stopScan();
+			delay(10);
 		}
-		onA = true;
-		wire->beginTransmission(SensorAddress1);             //Start addressing
-		wire->write(RangeCommand);                             //send range command
-		wire->endTransmission(I2C_STOP);
+		for (int i = 0 ; i < deviceCount ; i++){
+			initDevice(i);
 
-		controller->schedule(SCAN_ID,SCAN_DELAY,SCAN_DELAY,false,0,Controller::newString("SA"),id,false);
+		}
+		started = true;
+
 
 		scanning = true;
-		onA = true;
+
+			controller->schedule(SCAN_ID,scanRate,scanRate,false,0,Controller::newString("SCAN"),id,false);
+
 	}
 
 	void stopScan(){
 		if (scanning){
+			for (int i = 0 ; i < deviceCount ; i++){
+				digitalWrite(pins[i],LOW);
+			}
+
 			controller->kill(SCAN_ID);
 			scanning = false;
+			started = false;
 		}
 	}
 
 	void execute(uint32_t time,uint32_t id,char* command){
+    if (command[0] == 'E'){
+			startScan();
+			return;
+		}
+
 		if (!scanning)
 			return;
-		if(onA){
-			  wire->requestFrom(SensorAddress1, byte(2));
-			  if(wire->available() >= 2){                            //Sensor responded with the two bytes
-			      byte HighByte = wire->read();                        //Read the high byte back
-			      byte LowByte = wire->read();                        //Read the low byte back
-			      readingA  = word(HighByte, LowByte);         //Make a 16-bit word out of the two bytes for the range
-			   }else{
-			      readingA = 0;
-			   }
-				wire->beginTransmission(SensorAddress2);             //Start addressing
-				wire->write(RangeCommand);                             //send range command
-				wire->endTransmission(I2C_STOP,100);
-				onA = false;
-		}else{
-			wire->requestFrom(SensorAddress2, byte(2));
-			if(wire->available() >= 2){                            //Sensor responded with the two bytes
-			    byte HighByte = wire->read();                        //Read the high byte back
-			    byte LowByte = wire->read();                        //Read the low byte back
-			    readingB  = word(HighByte, LowByte);         //Make a 16-bit word out of the two bytes for the range
-			}else{
-			    readingB = 0;
+
+	 for (uint8_t i = 0; i < deviceCount;i++){
+		uint16_t result = devices[i].readRangeContinuousMillimeters(true);
+		if (result != 65535 && result != 0){
+			values[i] =( result+values[i]*2 )/3;
+			Serial.print(values[i] );
+						Serial.print(" , ");
+			goodRead[i] = time;
+		} else{
+			if ( time > 2*scanRate + goodRead[i]){
+				controller->getErrorLogger()->print("VL53L0X device #");
+				controller->getErrorLogger()->print(i);
+				controller->getErrorLogger()->println("failed - restarting");
+				controller->getErrorLogger()->finished(time,ErrorLogger::OS_MISC);
+				initDevice(i);
+				goodRead[i] = time+scanRate*4;
 			}
-			wire->beginTransmission(SensorAddress1);             //Start addressing
-			wire->write(RangeCommand);                             //send range command
-			wire->endTransmission(I2C_STOP,100);
-			onA = true;
 		}
+	 }
+	 Serial.println();
 	}
 
 
@@ -109,18 +152,47 @@ public:
 
 	}
 
-	uint16_t readingA;
-	uint16_t readingB;
-	bool scanning = false;
-	bool onA = false;
+
 
 
 private:
-	i2c_t3* wire;
+void initDevice(uint8_t i){
+	digitalWrite(pins[i],LOW);
+	delay(100);
+	digitalWrite(pins[i],HIGH);
+	delay(100);
+	devices[i]= VL53L0X();
 
+	devices[i].setWire(wire);
+
+	devices[i].setAddress(0b0101010+i+1);
+
+	devices[i].setMeasurementTimingBudget(scanRate<1000?scanRate:1000);
+
+	devices[i].init();
+
+	devices[i].startContinuous(scanRate);
+
+	goodRead[i] = millis()+scanRate*4;
+}
+
+ bool scanning = false;
+
+	VL53L0X* devices;
+
+	i2c_t3 *wire = &Wire;
+
+	uint8_t deviceCount;
+
+	uint8_t* pins;
+
+	uint16_t* values;
+	uint32_t* goodRead;
+
+	uint16_t scanRate = SCAN_RATE_DEFAULT;
+
+	bool started = false;
 
 };
-
-
 
 #endif

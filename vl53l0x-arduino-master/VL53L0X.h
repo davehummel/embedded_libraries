@@ -3,12 +3,6 @@
 
 #include <Arduino.h>
 
-
-// The Arduino two-wire interface uses a 7-bit number for the address,
-// and sets the last bit correctly based on reads and writes
-#define ADDRESS_DEFAULT1 0b0101001
-#define ADDRESS_DEFAULT2 0b0101010
-
 class VL53L0X
 {
   public:
@@ -130,7 +124,7 @@ class VL53L0X
 
     void startContinuous(uint32_t period_ms = 0);
     void stopContinuous(void);
-    uint16_t readRangeContinuousMillimeters(void);
+    uint16_t readRangeContinuousMillimeters(bool wait = true);
     uint16_t readRangeSingleMillimeters(void);
 
     inline void setTimeout(uint16_t timeout) { io_timeout = timeout; }

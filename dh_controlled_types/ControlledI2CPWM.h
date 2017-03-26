@@ -113,6 +113,7 @@ void reset (){
 		}
 				controller->getErrorLogger()->print("Bad I2CPWM command:");
 				controller->getErrorLogger()->println(command);
+		
 		}
 
 	void startSchedule(char command[], uint32_t id){

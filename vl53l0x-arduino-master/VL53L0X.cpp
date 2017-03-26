@@ -4,14 +4,13 @@
 // VL53L0X datasheet.
 
 #include <VL53L0X.h>
-#include <Wire.h>
+#include <i2c_t3.h>
 
 // Defines /////////////////////////////////////////////////////////////////////
 
 // The Arduino two-wire interface uses a 7-bit number for the address,
 // and sets the last bit correctly based on reads and writes
 #define ADDRESS_DEFAULT 0b0101001
-
 
 // Record the current time to check an upcoming timeout against
 #define startTimeout() (timeout_start_ms = millis())
@@ -282,6 +281,7 @@ bool VL53L0X::init(bool io_2v8)
 // Write an 8-bit register
 void VL53L0X::writeReg(uint8_t reg, uint8_t value)
 {
+  Serial.println(address);
   Wire.beginTransmission(address);
   Wire.write(reg);
   Wire.write(value);
@@ -811,11 +811,14 @@ void VL53L0X::stopContinuous(void)
 // Returns a range reading in millimeters when continuous mode is active
 // (readRangeSingleMillimeters() also calls this function after starting a
 // single-shot range measurement)
-uint16_t VL53L0X::readRangeContinuousMillimeters(void)
+uint16_t VL53L0X::readRangeContinuousMillimeters(bool wait)
 {
-  startTimeout();
+  if (wait)
+      startTimeout();
   while ((readReg(RESULT_INTERRUPT_STATUS) & 0x07) == 0)
   {
+    if (!wait)
+      return 65535;
     if (checkTimeoutExpired())
     {
       did_timeout = true;

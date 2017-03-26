@@ -132,6 +132,9 @@ public:
 						write(addr,temp);
 						return;
 					}
+					case BAD_TYPE:{
+						return;
+					}
 				}
 
 			}
@@ -335,6 +338,7 @@ public:
 							case A_TIME: logger->print(readT(*addr1Array[x],y+addr2Offset));
 							break;
 							case A_STRING: break;
+							case BAD_TYPE:break;
 						}
 					}
 				}

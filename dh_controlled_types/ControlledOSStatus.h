@@ -4,11 +4,9 @@
 
 const uint16_t INP = ADDR1::solveADDR("INP");
 const uint16_t ETX = ADDR1::solveADDR("ETX");
-const uint16_t LTX = ADDR1::solveADDR("LTX");
 const uint16_t LST = ADDR1::solveADDR("LST");
 const uint16_t ETM = ADDR1::solveADDR("ETM");
 const uint16_t TIM = ADDR1::solveADDR("TIM");
-const uint16_t ECD = ADDR1::solveADDR("ECD");
 
 class ControlledOSStatus: public Controller::Controlled{
 
