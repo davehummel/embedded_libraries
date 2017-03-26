@@ -167,7 +167,7 @@ void initDevice(uint8_t i){
 
 	devices[i].setAddress(0b0101010+i+1);
 
-	devices[i].setMeasurementTimingBudget(scanRate<1000?scanRate:1000);
+	devices[i].setMeasurementTimingBudget(scanRate<1000?scanRate*1000l:100000l);
 
 	devices[i].init();
 
