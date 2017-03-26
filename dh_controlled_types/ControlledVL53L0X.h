@@ -127,8 +127,8 @@ wire = _wire;
 		uint16_t result = devices[i].readRangeContinuousMillimeters(true);
 		if (result != 65535 && result != 0){
 			values[i] =( result+values[i]*2 )/3;
-			Serial.print(values[i] );
-						Serial.print(" , ");
+			// Serial.print(values[i] );
+			// 			Serial.print(" , ");
 			goodRead[i] = time;
 		} else{
 			if ( time > 2*scanRate + goodRead[i]){
@@ -141,7 +141,7 @@ wire = _wire;
 			}
 		}
 	 }
-	 Serial.println();
+	//  Serial.println();
 	}
 
 

@@ -57,16 +57,14 @@ void VL53L0X::setAddress(uint8_t new_addr)
 bool VL53L0X::init(bool io_2v8)
 {
   // VL53L0X_DataInit() begin
-    Serial.print("Init");
- Serial.println(readReg(I2C_SLAVE_DEVICE_ADDRESS));
-      Serial.print("Loading");
+
   // sensor uses 1V8 mode for I/O by default; switch to 2V8 mode if necessary
   if (io_2v8)
   {
     writeReg(VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV,
       readReg(VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV) | 0x01); // set bit 0
   }
-      Serial.print("Loading");
+
   // "Set I2C standard mode"
   writeReg(0x88, 0x00);
 
@@ -74,8 +72,7 @@ bool VL53L0X::init(bool io_2v8)
   writeReg(0xFF, 0x01);
   writeReg(0x00, 0x00);
   stop_variable = readReg(0x91);
-  if (stop_variable==0)
-    Serial.println("????");
+
   writeReg(0x00, 0x01);
   writeReg(0xFF, 0x00);
   writeReg(0x80, 0x00);
