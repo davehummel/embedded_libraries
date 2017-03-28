@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "Stream.h"
 #include <Arduino.h>
-//#define DEBUG ON
+#define DEBUG ON
 
 #define RESTART_ADDR       0xE000ED0C
 #define READ_RESTART()     (*(volatile uint32_t *)RESTART_ADDR)
