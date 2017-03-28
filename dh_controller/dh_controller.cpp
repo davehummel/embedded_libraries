@@ -335,7 +335,7 @@ void Controller::processInput(Stream* stream){
 		if (next == '\n'||next == '\r'){
 
 			Serial.print(">>");
-			Serial.println(buffer);
+			Serial.println(inputBuffer);
 
 			parseBuffer();
 				memcpy (lastProcessedLine,inputBuffer,(bufferCount<254?bufferCount:254));
