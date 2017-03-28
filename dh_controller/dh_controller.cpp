@@ -337,7 +337,7 @@ void Controller::processInput(Stream* stream){
 
 			Serial.print('>');
 			Serial.print(bufferCount);
-			Serial.print('>')
+			Serial.print('>');
 			Serial.println(inputBuffer);
 
 			parseBuffer();
