@@ -332,9 +332,7 @@ uint16_t targetCount = 0; // THis is used to track killed count  and copy back w
 void Controller::processInput(Stream* stream){
 	while (stream->available()){
 		char next = stream->read();
-		Serial.print('[');
 		Serial.print(next);
-		Serial.print(']');
 		if (next == '\n'||next == '\r'){
 
 			Serial.print(">>");
