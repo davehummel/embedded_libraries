@@ -7,6 +7,7 @@ const uint16_t ETX = ADDR1::solveADDR("ETX");
 const uint16_t LST = ADDR1::solveADDR("LST");
 const uint16_t ETM = ADDR1::solveADDR("ETM");
 const uint16_t TIM = ADDR1::solveADDR("TIM");
+const uint16_t CLK = ADDR1::solveADDR("CLK");
 
 class ControlledOSStatus: public Controller::Controlled{
 
@@ -33,6 +34,14 @@ public:
 				logger->batchSend();
 				return;
 		}
+		if (command[0] == 'T' && command[1] == 'I'){
+				controller->transmitTime = true;
+				return;
+		}
+		if (command[0] == 'N' && command[1] == 'O'){
+				controller->transmitTime = false;
+				return;
+		}
 	}
 	void startSchedule(char command[], uint32_t id){
 
@@ -41,6 +50,10 @@ public:
 
 	}
 
+void write(ADDR1 addr,uint32_t val){
+		if (addr.addr == CLK )
+			controller->setClockOffset(val);
+}
 
 	uint8_t readB(ADDR1 addr,uint8_t addr2){
 	//	if (addr.addr == ECD) return controller->getErrorCode();
@@ -53,18 +66,15 @@ public:
 	//
 	uint32_t readT(ADDR1 addr,uint8_t addr2){
 			if (addr.addr == ETM) return controller->getErrorLogger()->getErrorTime();
+			if (addr.addr == CLK) return controller->getClockOffset();
 			if (addr.addr == TIM) return controller->lastProcessedMSTime;
 			return 0;
 	}
 
 	char* readS(ADDR1 addr,uint8_t addr2){
-
 			if (addr.addr == INP) return controller->getInputBuffer();
-
 			if (addr.addr == ETX) return controller->getErrorLogger()->getErrorText();
-
 		  if (addr.addr == LST) return controller->lastProcessedLine;
-
 		return 0;
 	}
 

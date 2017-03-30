@@ -260,8 +260,9 @@ void Controller::execute(){
 
 	lastProcessedMSTime +=offset;
 
-	if (transmitTimeOnTick){
+	if (transmitTime && lastProcessedMSTime-lastTickTime > 1000l){
 	  		logger.sendTimeSync(lastProcessedMSTime);
+				lastTickTime = lastProcessedMSTime % 1000;
 	}
 
 
@@ -625,6 +626,17 @@ if (timedSize>=MAX_SCHED)
 
 	timedSize++;
 	return true;
+}
+
+void Controller::setClockOffset(uint32_t offset){
+	int32_t delta = (int32_t)(offset - lastProcessedMSTime);
+	lastProcessedMSTime += delta;
+	millis = offset;
+	clockOffset = offset;
+}
+
+uint32_t Controller::getClockOffset(){
+	return clockOffset;
 }
 
 // ID = 0 kills all running controllables

@@ -390,6 +390,10 @@ public:
 
 	void reboot(void);
 
+	void setClockOffset(uint32_t);
+
+	uint32_t getClockOffset();
+
 	void processInput(Stream* serial);
 
 	void parserError(uint16_t offset,const char* errorTitle);
@@ -422,7 +426,7 @@ public:
 
 	static uint32_t lastProcessedMSTime;
 
-	bool transmitTimeOnTick = false;
+	bool transmitTime = false;
 
 private:
 
@@ -458,6 +462,10 @@ private:
 	ErrorLogger error;
 
 	elapsedMillis millis;
+
+	uint32_t lastTickTime = 0;
+
+	uint32_t clockOffset = 0;
 
 	void parseBuffer();
 
