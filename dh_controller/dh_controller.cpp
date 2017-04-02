@@ -856,8 +856,6 @@ bool Controller::parse_uint32(uint32_t &val, uint16_t &pointer,char* text){
 	for (int i = valChars-1;i>=0;i--){
 		val+= multiplier*(text[pointer+i]-'0');
 		multiplier*=10;
-		Serial.print(".");
-	 Serial.println(val);
 	}
 
 
