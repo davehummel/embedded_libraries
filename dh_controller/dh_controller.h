@@ -117,6 +117,9 @@ public:
 						return;
 					}
 					case A_TIME:{
+						Serial.print(offset);
+						Serial.print(":");
+						Serial.println(command);
 						uint32_t val;
 						parse_uint32(val,offset,command);
 						write(addr,val);
@@ -390,10 +393,6 @@ public:
 
 	void reboot(void);
 
-	void setClockOffset(uint32_t);
-
-	uint32_t getClockOffset();
-
 	void processInput(Stream* serial);
 
 	void parserError(uint16_t offset,const char* errorTitle);
@@ -464,8 +463,6 @@ private:
 	elapsedMillis millis;
 
 	uint32_t lastTickTime = 0;
-
-	uint32_t clockOffset = 0;
 
 	void parseBuffer();
 

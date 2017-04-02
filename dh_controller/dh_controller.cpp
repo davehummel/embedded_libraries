@@ -260,9 +260,9 @@ void Controller::execute(){
 
 	lastProcessedMSTime +=offset;
 
-	if (transmitTime && lastProcessedMSTime-lastTickTime > 1000l){
+	if (transmitTime && ((lastProcessedMSTime-lastTickTime) > 1000l)){
 	  		logger.sendTimeSync(lastProcessedMSTime);
-				lastTickTime = lastProcessedMSTime % 1000;
+				lastTickTime =(lastProcessedMSTime/1000)*1000;
 	}
 
 
@@ -628,16 +628,6 @@ if (timedSize>=MAX_SCHED)
 	return true;
 }
 
-void Controller::setClockOffset(uint32_t offset){
-	int32_t delta = (int32_t)(offset - lastProcessedMSTime);
-	lastProcessedMSTime += delta;
-	millis = offset;
-	clockOffset = offset;
-}
-
-uint32_t Controller::getClockOffset(){
-	return clockOffset;
-}
 
 // ID = 0 kills all running controllables
 bool Controller::kill(uint32_t id){
@@ -807,7 +797,7 @@ bool Controller::parse_double(double &val, uint16_t &pointer, char* text){
 	uint8_t valChars;
 	uint8_t decimalLoc=255;
 
-	for (valChars = 0; valChars <= 20; valChars++){
+	for (valChars = 0; valChars < 20; valChars++){
 		char c = text[pointer + valChars];
 		if (c == '.'){
 			if (decimalLoc != 255)
@@ -852,7 +842,7 @@ bool Controller::parse_uint32(uint32_t &val, uint16_t &pointer,char* text){
 
 	uint8_t valChars;
 
-	for (valChars=0;valChars<=10;valChars++){
+	for (valChars=0;valChars<11;valChars++){
 		char c = text[pointer+valChars];
 		if (c<'0' || c>'9')
 			break;
@@ -866,7 +856,10 @@ bool Controller::parse_uint32(uint32_t &val, uint16_t &pointer,char* text){
 	for (int i = valChars-1;i>=0;i--){
 		val+= multiplier*(text[pointer+i]-'0');
 		multiplier*=10;
+		Serial.print(".");
+	 Serial.println(val);
 	}
+
 
 	pointer+=valChars;
 
