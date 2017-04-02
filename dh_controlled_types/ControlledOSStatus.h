@@ -19,7 +19,6 @@ public:
 
 	}
 	void execute(uint32_t time,uint32_t id,char command[]){
-						Serial.print("OS:");
   	if (command[0] == 'C' && command[1] == 'E'){
 				controller->getErrorLogger()->clearError();
 				return;
@@ -36,7 +35,6 @@ public:
 		}
 		if (command[0] == 'T' && command[1] == 'I'){
 				controller->transmitTime = true;
-				Serial.println("ON");
 				return;
 		}
 		if (command[0] == 'N' && command[1] == 'O'){
