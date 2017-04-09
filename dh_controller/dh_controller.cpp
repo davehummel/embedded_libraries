@@ -89,7 +89,7 @@ bool additiveInterval, uint32_t runCount, char command[],char controlled,uint8_t
 	entry->controlled = library[controlledIndex];
 	entry->runCount = runCount;
 	entry->executeInterval = executeInterval;
-  //logger.sendLineSync(entry->controlled->id,entry->id);
+
 	entry->controlled->startSchedule(command,id);
 
 	entry->nextExecuteTime = (uint32_t)millis;
@@ -224,7 +224,6 @@ void Controller::execute(){
 				immediate[i]->controlled->execute((uint32_t)millis,immediate[i]->id,immediate[i]->command);
 				break;
 			case READ:
-				//logger.sendLineSync(immediate[i]->controlled->id,immediate[i]->id);
 				immediate[i]->controlled->transmit(&logger,(uint32_t)millis,immediate[i]->id,immediate[i]->command);
 				break;
 			case WRITE:
@@ -335,8 +334,11 @@ void Controller::processInput(Stream* stream){
 		char next = stream->read();
 	//	Serial.print(next);
 		if (next == '\n'||next == '\r'){
-
+									Serial.print(">>");
+										Serial.println(inputBuffer);
 			parseBuffer();
+			dataProcessed = true;
+										digitalWrite(13,HIGH);
 				memcpy (lastProcessedLine,inputBuffer,(bufferCount<254?bufferCount:254));
 				if (bufferCount>=254)
 						lastProcessedLine[254] = '\0';

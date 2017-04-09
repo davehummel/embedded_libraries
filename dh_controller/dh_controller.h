@@ -367,6 +367,18 @@ public:
 
 		};
 
+		void loop(Stream* stream){
+			if (stream->available()){
+				processInput(stream);
+			}
+			execute();
+			if (dataProcessed){
+				logger.sendLineSync();
+										digitalWrite(13,LOW);
+				dataProcessed = false;
+			}
+		}
+
 	void loadControlled(char id,Controlled* controlled);
 
 	Controlled* getControlled(char id);
@@ -463,6 +475,8 @@ private:
 	elapsedMillis millis;
 
 	uint32_t lastTickTime = 0;
+
+	bool dataProcessed = false;
 
 	void parseBuffer();
 
