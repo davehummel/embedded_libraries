@@ -374,7 +374,6 @@ public:
 			execute();
 			if (dataProcessed){
 				logger.sendLineSync();
-										digitalWrite(13,LOW);
 				dataProcessed = false;
 			}
 		}

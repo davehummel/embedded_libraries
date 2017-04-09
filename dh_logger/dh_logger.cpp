@@ -138,7 +138,7 @@ void Logger::sendLineSync() {
 	tmp[3] = 0xFF;
 
 	stream->write(tmp, 4);
-	Serial.println("poof");
+	//Serial.println("poof");
 }
 
 bool Logger::startBatchSend( char mod, uint32_t instID){

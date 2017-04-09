@@ -334,11 +334,10 @@ void Controller::processInput(Stream* stream){
 		char next = stream->read();
 	//	Serial.print(next);
 		if (next == '\n'||next == '\r'){
-									Serial.print(">>");
-										Serial.println(inputBuffer);
+			Serial.print(">>");
+		  Serial.println(inputBuffer);
 			parseBuffer();
-			dataProcessed = true;
-										digitalWrite(13,HIGH);
+
 				memcpy (lastProcessedLine,inputBuffer,(bufferCount<254?bufferCount:254));
 				if (bufferCount>=254)
 						lastProcessedLine[254] = '\0';
@@ -347,10 +346,12 @@ void Controller::processInput(Stream* stream){
 			inputBuffer[0] = '#';
 			inputBuffer[1] = '\0';
 		}else{
+			dataProcessed = true;
 			inputBuffer[bufferCount] = next;
 			inputBuffer[bufferCount+1] = '\0';
 			if (bufferCount == INP_BUFF_SIZE-1){
 				bufferCount = 0;
+				error.setParseError(inputBuffer,bufferCount,"Input Buffer overflowed!");
 			}else{
 				bufferCount++;
 			}
