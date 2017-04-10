@@ -32,6 +32,7 @@ public:
 			pinMode(pins[i],OUTPUT);
 			digitalWrite(pins[i],LOW);
 		}
+		delay(500);
 
 	}
 
