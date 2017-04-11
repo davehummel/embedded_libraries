@@ -21,6 +21,7 @@ public:
 		devices = new VL53L0X[deviceCount]{};
 		values = new uint16_t[deviceCount];
 		goodRead = 	 new uint32_t[deviceCount];
+		retries = new uint8_t[deviceCount];
 	}
 
 
@@ -80,6 +81,9 @@ wire = _wire;
 			if (id>= deviceCount)
 				return 0;
 
+		if (retries[id]>2)
+			return 0;
+
 			return values[id];
 
 	}
@@ -131,14 +135,23 @@ wire = _wire;
 			// Serial.print(values[i] );
 			// 			Serial.print(" , ");
 			goodRead[i] = time;
+			retries[i] = 0;
 		} else{
 			if ( time > 2*scanRate + goodRead[i]){
+				if (retries[i] > 24){
+					controller->getErrorLogger()->print("VL53L0X device #");
+					controller->getErrorLogger()->print(i);
+					controller->getErrorLogger()->println("No longer trying to restart");
+					controller->getErrorLogger()->finished(time,ErrorLogger::OS_MISC);
+					return;
+				}
 				controller->getErrorLogger()->print("VL53L0X device #");
 				controller->getErrorLogger()->print(i);
 				controller->getErrorLogger()->println("failed - restarting");
 				controller->getErrorLogger()->finished(time,ErrorLogger::OS_MISC);
 				initDevice(i);
-				goodRead[i] = time+scanRate*4;
+				goodRead[i] = time+5000l;
+				retries[i]++;
 			}
 		}
 	 }
@@ -189,6 +202,7 @@ void initDevice(uint8_t i){
 
 	uint16_t* values;
 	uint32_t* goodRead;
+	uint8_t* retries;
 
 	uint16_t scanRate = SCAN_RATE_DEFAULT;
 
