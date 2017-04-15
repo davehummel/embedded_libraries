@@ -324,7 +324,6 @@ public:
 			else
 				return func->readT();
 		}
-		uint8_t num;
 
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;

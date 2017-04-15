@@ -96,6 +96,7 @@ public:
 			case A_DOUBLE: temp = (module->readD(addr1,addr2)); break;
 			case A_TIME: temp = (module->readT(addr1,addr2)); break;
 			case A_STRING: temp = 0; break;
+			case BAD_TYPE: temp = 0; break;
 		}
 
 		if (temp != val){
@@ -727,11 +728,11 @@ private:
 class ControlledTouchLCD: public Controller::Controlled{
 public:
 
-	char* readS(ADDR1 addr,uint8_t addr2){
+	char* readConS(ADDR1 addr,uint8_t addr2){
 		return 0;
 	}
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 
 		switch (addr.addr%26){
 			case 1:
@@ -743,11 +744,11 @@ public:
 		}
 	}
 
-	void write(ADDR1 addr,uint16_t val){
+	void writeCon(ADDR1 addr,uint16_t val){
 		bgColor = val;
 	}
 
-	int16_t readI(ADDR1 addr,uint8_t addr2){
+	int16_t readConI(ADDR1 addr,uint8_t addr2){
 		if (addr2 == 0)
 			return touchX;
 		else if (addr2 == 1)
@@ -755,12 +756,12 @@ public:
 		return 0;
 	}
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 		return lastButtonID;
 	}
 
 
-	uint32_t readT(ADDR1 addr,uint8_t addr2){
+	uint32_t readConT(ADDR1 addr,uint8_t addr2){
 		return lastButtonTime;
 	}
 
