@@ -207,7 +207,6 @@ void Controller::setOutputStream(Stream* output){
 }
 
 void Controller::setErrorStream(Stream* output){
-	// First check immediate run queue
 	error.stream=(output);
 }
 

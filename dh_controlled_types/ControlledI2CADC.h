@@ -161,6 +161,7 @@ public:
 					uint16_t temp = 5;
 					if (!Controller::parse_uint8(gainInput,temp,command)){
 						controller->getErrorLogger()->println("GAIN must be set to a number.");
+            					controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
 						return;
 					}
 					switch (gainInput) {
@@ -171,6 +172,8 @@ public:
 						case 8: gain = ADS1015_REG_CONFIG_PGA_0_512V; break;
 						case 16: gain = ADS1015_REG_CONFIG_PGA_0_256V; break;
 						default : 		controller->getErrorLogger()->print("Bad GAIN level (0,1,2,4,8,16) required");
+            					controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
+                      return;
 					}
 
 				break;
@@ -178,6 +181,7 @@ public:
 		}
 				controller->getErrorLogger()->print("Bad I2CPWM command:");
 				controller->getErrorLogger()->println(command);
+        					controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
 		}
 
 	void startSchedule(char command[], uint32_t id){
@@ -192,6 +196,7 @@ public:
 
 		if (channel>3){
 			controller->getErrorLogger()->print("Channel to read must be A,B,C,D");
+      					controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
 			return 0;
 		}
 

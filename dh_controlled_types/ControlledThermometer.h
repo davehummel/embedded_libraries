@@ -97,6 +97,7 @@ public:
 				controller->getErrorLogger()->print("Thermo ");
 				controller->getErrorLogger()->print((char)(num+'A'));
 				controller->getErrorLogger()->print("is not supported. ");
+									controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
 				return 0 ;
 			}
 

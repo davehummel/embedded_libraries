@@ -105,6 +105,7 @@ void reset (){
 					uint16_t temp = 4;
 					if (!Controller::parse_double(sampleRate,temp,command)){
 						controller->getErrorLogger()->println("FRQ must be set to a number.");
+											controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
 						return;
 					}
 					setPWMFreq(sampleRate);
@@ -113,7 +114,8 @@ void reset (){
 		}
 				controller->getErrorLogger()->print("Bad I2CPWM command:");
 				controller->getErrorLogger()->println(command);
-		
+									controller->getErrorLogger()->finished(time,ErrorLogger::MOD_PARSER);
+
 		}
 
 	void startSchedule(char command[], uint32_t id){
