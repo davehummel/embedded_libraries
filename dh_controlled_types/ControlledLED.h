@@ -17,8 +17,11 @@ public:
 	void execute(uint32_t time,uint32_t id,char command[]){
 		bool isPWM = true;
 		bool isBLK = false;
+		bool isDSC = false;
 		uint16_t temp;
 		switch (command[0]){
+			case 'D':
+			isDSC = true;
 			case 'B':
 				isPWM = false;
 				if (command[1] == 'L')
@@ -55,20 +58,29 @@ public:
 					pinID[letter] = pID;
 					pinVal[letter] = 0;
 					pinPWM[letter] = isPWM;
-
+					pinDSC[letter] = isDSC;
 
 
 					if (pID!=0){
-						pinMode(pID,OUTPUT);
-						if (isPWM)
+
+						if (isPWM){
+							pinMode(pID,OUTPUT);
 							analogWrite(pID,0);
-						else
+						}else if (isDSC){
+							pinMode(pID,INPUT);
+					 }else{
+						 		pinMode(pID,OUTPUT);
 						  digitalWrite(pID,LOW);
+						}
 					}
 				break;}
 			case 'K':{ // this is self scheduled to powerr BLK functionality
 				uint8_t letter = id - LED_ID;
-				digitalWrite(pinID[letter],LOW);
+				if (pinDSC[letter]){
+					pinMode(pinID[letter],INPUT);
+				}else {
+					digitalWrite(pinID[letter],LOW);
+				}
 				return;
 			}
 			case 'F':{
@@ -133,7 +145,16 @@ public:
 		if (pinPWM[letter]) {
 			analogWrite(pinID[letter],pinVal[letter]=val);
 		}else{
-			digitalWrite(pinID[letter],(pinVal[letter]=(val!=0)));
+			if (pinDSC[letter]){
+				if (val==0){
+				  pinMode(pinID[letter],INPUT);
+				}else{
+					pinMode(pinID[letter],OUTPUT);
+					digitalWrite(pinID[letter],HIGH);
+				}
+			}else{
+				digitalWrite(pinID[letter],(pinVal[letter]=(val!=0)));
+			}
 			if (val > 0 && blkDur[letter]>0){
 						controller->schedule(LED_ID+letter,blkDur[letter],0,false,1,Controller::newString("K"),id,false);
 			}
@@ -147,7 +168,7 @@ public:
 		if (pinPWM[letter]) {
 			analogWrite(pinID[letter],pinVal[letter]=val);
 		}else{
-			digitalWrite(pinID[letter],(pinVal[letter]=(val!=0)));
+			writeCon(addr,(uint8_t) val);
 		}
 	}
 
@@ -166,6 +187,7 @@ private:
 	uint32_t pinVal[26] = {0};
 	uint16_t blkDur[26] = {0};
 	bool pinPWM[26] = {false};
+	bool pinDSC[26] = {false};
 
 };
 

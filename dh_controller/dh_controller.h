@@ -198,6 +198,12 @@ public:
 						writeCon(addr,val);
 			}
 			void write(ADDR1 addr,float val){
+				if (addr.isVRVar){
+					Serial.print ("VR write to ");
+					Serial.print (addr.getVRLetter());
+					Serial.print (" val=");
+					Serial.println(val);
+				}
 				if (addr.isVRVar)
 					varF[addr.getVRLetter()]=val;
 					else
