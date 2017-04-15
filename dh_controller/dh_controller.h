@@ -358,12 +358,35 @@ public:
 				return remainder==0;
 			}
 
+			// void writeVar(uint8_t letter,uint8_t val){
+			//
+			// }
+			// void writeVar(uint8_t letter,uint8_t val){
+			//
+			// }
+			// void writeVar(uint8_t letter,uint8_t val){
+			//
+			// }
+			// void writeVar(uint8_t letter,uint8_t val){
+			//
+			// }
+			// void writeVar(uint8_t letter,uint8_t val){
+			//
+			// }
+
 
 			char* error;
 			Controller* controller;
 			char id;
 
 		private:
+			uint8_t varB[26]={0};
+			uint8_t varU[26]={0};
+			uint8_t varI[26]={0};
+			uint8_t varL[26]={0};
+			uint8_t varF[26]={0};
+			uint8_t varD[26]={0};
+			uint8_t varT[26]={0};
 
 		};
 
