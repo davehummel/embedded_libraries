@@ -21,14 +21,14 @@ public:
 			motor = new qik2s12v10(&Serial2);
 		}
 	}
-	
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 		char command = addr.addr%26+'A';
 		bool isLeft = ((addr.addr/26)%26+'A') == 'L';
 		if (flipMotors)
 			isLeft = !isLeft;
 		switch(command){
-				case 'B': 
+				case 'B':
 					if (isLeft)
 						return m0Break;
 					else
@@ -40,18 +40,18 @@ public:
 						error = motor->getErrorByte();
 					}
 					return error;
-			
+
 		}
 			return 0;
 	}
-	
-	int16_t readI(ADDR1 addr,uint8_t addr2){
+
+	int16_t readConI(ADDR1 addr,uint8_t addr2){
 		char command = addr.addr%26+'A';
 		bool isLeft = ((addr.addr/26)%26+'A') == 'L';
 		if (flipMotors)
 			isLeft = !isLeft;
 		switch(command){
-				case 'T': 
+				case 'T':
 					return throttle;
 				case 'D':
 					return differential;
@@ -68,8 +68,8 @@ public:
 		}
 		return -1;
 	}
-	
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 		char command = addr.addr%26+'A';
 		bool isLeft = ((addr.addr/26)%26+'A') == 'L';
 		if (flipMotors)
@@ -90,14 +90,14 @@ public:
 			return -1;
 	}
 
-	
-	void write(ADDR1 addr,uint8_t val){
+
+	void writeCon(ADDR1 addr,uint8_t val){
 		char command = addr.addr%26+'A';
 		bool isLeft = ((addr.addr/26)%26+'A') == 'L';
 		if (flipMotors)
 			isLeft = !isLeft;
 		switch(command){
-			case 'B': 
+			case 'B':
 				if(isLeft){
 					motor->breaks0(m0Break = val);
 					m0Speed = 0;
@@ -109,15 +109,15 @@ public:
 			default: break;
 		}
 	}
-	
-	void write(ADDR1 addr,int16_t val){
+
+	void writeCon(ADDR1 addr,int16_t val){
 		char command = addr.addr%26+'A';
 		switch(command){
-			case 'T': 
+			case 'T':
 				throttle = val;
 				setMotor();
 				break;
-			case 'D': 
+			case 'D':
 				differential = val;
 				setMotor();
 				break;
@@ -125,19 +125,19 @@ public:
 			default: break;
 		}
 	}
-	
-	
+
+
 
 	void execute(uint32_t time,uint32_t id,char command[]){
-		
+
 	}
-	
+
 
 	void startSchedule(char command[], uint32_t id){
-		
+
 	}
 	void endSchedule(char command[], uint32_t id){
-		
+
 	}
 
 	void setMotor(){
@@ -196,10 +196,10 @@ public:
 
 		if (a < 0){
 			m0Speed = -a;
-			m0F = false; 
+			m0F = false;
 		}
 		else {
-			m0Speed = a; 
+			m0Speed = a;
 			m0F = true;
 		}
 
@@ -211,7 +211,7 @@ public:
 			m1Speed = b;
 			m1F = true;
 		}
-		
+
 		if (flipMotors){
 			uint8_t temp = m0Speed;
 			m0Speed = m1Speed;
@@ -246,7 +246,7 @@ public:
 	uint8_t m0Current=0,m1Current=0;
 	uint8_t m0Speed=0,m1Speed=0;
 	bool m0F,m1F;
-	
+
 	int16_t throttle,differential;
 
 
@@ -255,7 +255,7 @@ public:
 	uint32_t readSpeedTime = 0;
 	uint32_t readCurrentTime = 0;
 	uint32_t readErrorTime = 0;
-	
+
 private:
 	bool flipMotors = false;
 	uint8_t resetPin;
@@ -265,6 +265,6 @@ private:
 
 
 
-	
+
 
 #endif

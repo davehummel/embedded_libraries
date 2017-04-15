@@ -21,7 +21,7 @@ public:
 		 servo = new ax_12a(&Serial3,TRI_STATE_PIN,2);
 	}
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 			if (!enabled)
 				return 0;
 			switch(addr.addr%26+'A'){
@@ -31,7 +31,7 @@ public:
 			}
 	}
 
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 			if (!enabled)
 				return 0;
 			switch(addr.addr%26+'A'){
@@ -49,7 +49,7 @@ public:
 			}
 	}
 
-	float readF(ADDR1 addr,uint8_t addr2){
+	float readConF(ADDR1 addr,uint8_t addr2){
 			if (!enabled)
 				return 0;
 			switch(addr.addr%26+'A'){
@@ -59,7 +59,7 @@ public:
 			}
 	}
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 		switch(addr.addr%26+'A'){
 			case 'E':
 				enabled = val == 1;
@@ -69,7 +69,7 @@ public:
 		}
 	}
 
-	void write(ADDR1 addr,uint16_t val){
+	void writeCon(ADDR1 addr,uint16_t val){
 		switch(addr.addr%26+'A'){
 			case 'P':		;  servo->move(1,val);return;
 			case 'T':      servo->move(2,val);return;

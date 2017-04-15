@@ -240,14 +240,11 @@ public:
 			else
 				return func->readB();
 		}
-		uint8_t num;
-		if (getVar(num,addr)){
-			return bVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
+
 	}
 	uint16_t readU(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
@@ -257,14 +254,11 @@ public:
 			}else
 				return func->readU();
 		}
-		uint8_t num;
-		if (getVar(num,addr)){
-			return uVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
+
 	}
 	int16_t readI(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
@@ -274,14 +268,11 @@ public:
 			else
 				return func->readI();
 		}
-		uint8_t num;
-		if (getVar(num,addr)){
-			return iVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
+
 	}
 	int32_t readL(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
@@ -291,14 +282,11 @@ public:
 			else
 				return func->readL();
 		}
-		uint8_t num;
-		if (getVar(num,addr)){
-			return lVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
+
 	}
 	float readF(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
@@ -308,14 +296,11 @@ public:
 			else
 				return func->readF();
 		}
-		uint8_t num;
-		if (getVar(num,addr)){
-			return fVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
+
 	}
 	double readD(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
@@ -325,14 +310,11 @@ public:
 			else
 				return func->readD();
 		}
-		uint8_t num;
-		if (getVar(num,addr)){
-			return dVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
+
 	}
 	uint32_t readT(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
@@ -343,69 +325,11 @@ public:
 				return func->readT();
 		}
 		uint8_t num;
-		if (getVar(num,addr)){
-			return tVars[num];
-		}else{
+
 			if (addr.addr == TIME_VARCONST)
 				return Controller::lastProcessedMSTime;
 			return 0;
-		}
-	}
 
-	void write(ADDR1 addr,uint8_t val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			bVars[num] = val;
-			return;
-		}
-	}
-
-	void write(ADDR1 addr,uint16_t val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			uVars[num] = val;
-			return;
-		}
-	}
-
-	void write(ADDR1 addr,int16_t val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			iVars[num] = val;
-			return;
-		}
-	}
-
-	void write(ADDR1 addr,int32_t val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			lVars[num] = val;
-			return;
-		}
-	}
-
-	void write(ADDR1 addr,float val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			fVars[num] = val;
-			return;
-		}
-	}
-
-	void write(ADDR1 addr,double val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			dVars[num] = val;
-			return;
-		}
-	}
-
-	void write(ADDR1 addr,uint32_t val){
-		uint8_t num;
-		if (getVar(num,addr)){
-			tVars[num] = val;
-			return;
-		}
 	}
 
 
@@ -416,7 +340,6 @@ public:
 	}
 
 	bool transmit(Logger* logger,uint32_t _time,uint32_t instID, uint8_t width, uint8_t length,ADDR1** addr1Array,uint8_t addr2Offset){
-
 		return Controlled::transmit(logger,_time,instID,width,length,addr1Array,addr2Offset);
 	}
 	void execute(uint32_t _time,uint32_t id,char command[]){
@@ -680,15 +603,6 @@ private:
 
 
 	Func** functions[26]={};
-
-
-	uint8_t bVars[156]={};
-	uint16_t uVars[156]={};
-	int16_t iVars[156]={};
-	int32_t lVars[156]={};
-	float fVars[156]={};
-	double dVars[156]={};
-	uint32_t tVars[156]={};
 
 };
 

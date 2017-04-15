@@ -29,29 +29,70 @@ public:
 			virtual void execute(uint32_t time,uint32_t id,char command[])=0;
 			virtual void startSchedule(char command[],uint32_t id)=0;
 			virtual void endSchedule(char command[], uint32_t id)=0;
-			virtual uint8_t readB(ADDR1 addr,uint8_t addr2){
+
+			virtual uint8_t readConB(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual uint16_t readU(ADDR1 addr,uint8_t addr2){
+			virtual uint16_t readConU(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual int16_t readI(ADDR1 addr,uint8_t addr2){
+			virtual int16_t readConI(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual int32_t readL(ADDR1 addr,uint8_t addr2){
+			virtual int32_t readConL(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual float readF(ADDR1 addr,uint8_t addr2){
+			virtual float readConF(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual double readD(ADDR1 addr,uint8_t addr2){
+			virtual double readConD(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual uint32_t readT(ADDR1 addr,uint8_t addr2){
+			virtual uint32_t readConT(ADDR1 addr,uint8_t addr2){
 				return 0;
 			}
-			virtual char* readS(ADDR1 addr,uint8_t addr2){
+			virtual char* readConS(ADDR1 addr,uint8_t addr2){
 				return 0;
+			}
+
+
+			uint8_t readB(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varB[addr.getVRLetter()];
+				return readConB(addr, addr2);
+			}
+			uint16_t readU(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varU[addr.getVRLetter()];
+				return readConU(addr, addr2);
+			}
+			int16_t readI(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varI[addr.getVRLetter()];
+				return readConI(addr, addr2);
+			}
+			int32_t readL(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varL[addr.getVRLetter()];
+				return readConL(addr, addr2);
+			}
+			float readF(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varF[addr.getVRLetter()];
+				return readConF(addr, addr2);
+			}
+			double readD(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varD[addr.getVRLetter()];
+				return readConD(addr, addr2);
+			}
+			uint32_t readT(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar)
+					return varT[addr.getVRLetter()];
+				return readConT(addr, addr2);
+			}
+			char* readS(ADDR1 addr,uint8_t addr2){
+				return readConS(addr, addr2);
 			}
 
 
@@ -71,13 +112,6 @@ public:
 				ADDR1 addr = ADDR1(temp,type);
 
 				uint16_t offset = 6;
-
-// TODO Read a value from VARIABLE IN including the ADDR1 and ADDR2 parts
-				// bool isWriteFromVar = false;
-				// if (command[offset] == '$'){
-				// 	isWriteFromVar = true;
-				//
-				// }
 
 				switch(type){
 					case A_BYTE:{
@@ -117,9 +151,6 @@ public:
 						return;
 					}
 					case A_TIME:{
-						Serial.print(offset);
-						Serial.print(":");
-						Serial.println(command);
 						uint32_t val;
 						parse_uint32(val,offset,command);
 						write(addr,val);
@@ -142,30 +173,78 @@ public:
 
 			}
 
-			virtual void write(ADDR1 addr,uint8_t val){
+			void write(ADDR1 addr,uint8_t val){
+				if (addr.isVRVar)
+					varB[addr.getVRLetter()]=val;
+					else
+						writeCon(addr,val);
+			}
+			void write(ADDR1 addr,uint16_t val){
+				if (addr.isVRVar)
+					varU[addr.getVRLetter()]=val;
+					else
+						writeCon(addr,val);
+			}
+			void write(ADDR1 addr,int16_t val){
+				if (addr.isVRVar)
+					varI[addr.getVRLetter()]=val;
+					else
+						writeCon(addr,val);
+			}
+			void write(ADDR1 addr,int32_t val){
+				if (addr.isVRVar)
+					varL[addr.getVRLetter()]=val;
+					else
+						writeCon(addr,val);
+			}
+			void write(ADDR1 addr,float val){
+				if (addr.isVRVar)
+					varF[addr.getVRLetter()]=val;
+					else
+						writeCon(addr,val);
+			}
+			void write(ADDR1 addr,double val){
+				if (addr.isVRVar)
+					varD[addr.getVRLetter()]=val;
+					else
+						writeCon(addr,val);
+			}
+			void write(ADDR1 addr,uint32_t val){
+				if (addr.isVRVar)
+					varT[addr.getVRLetter()]=val;
+				else
+					writeCon(addr,val);
+			}
+			void write(ADDR1 addr,const char* val){
+					writeCon(addr,val);
+			}
+
+
+			virtual void writeCon(ADDR1 addr,uint8_t val){
 
 			}
-			virtual void write(ADDR1 addr,uint16_t val){
+			virtual void writeCon(ADDR1 addr,uint16_t val){
 
 			}
-			virtual void write(ADDR1 addr,int16_t val){
+			virtual void writeCon(ADDR1 addr,int16_t val){
 
 			}
-			virtual void write(ADDR1 addr,int32_t val){
+			virtual void writeCon(ADDR1 addr,int32_t val){
 
 			}
-			virtual void write(ADDR1 addr,float val){
+			virtual void writeCon(ADDR1 addr,float val){
 
 			}
-			virtual void write(ADDR1 addr,double val){
+			virtual void writeCon(ADDR1 addr,double val){
 
 			}
-			virtual void write(ADDR1 addr,uint32_t val){
+			virtual void writeCon(ADDR1 addr,uint32_t val){
 
 			}
-			virtual void write(ADDR1 addr,const char* val){
+			virtual void writeCon(ADDR1 addr,const char* val){
 
 			}
+
 			virtual bool transmit(Logger* logger,uint32_t time,uint32_t id,char command[]){
 				#ifdef DEBUG
 					Serial.print("Outer Transmit :\n ID = ");
@@ -292,7 +371,7 @@ public:
 					case A_DOUBLE:
 					 size*=8;
 					break;
-					case A_STRING:
+					case A_STRING:{
 					  char* temp = readS(*addr1Array[0],addr2Offset);
 							for(size=0; size<1024;size++){
 								 if (temp[size] == '\0'){
@@ -304,6 +383,9 @@ public:
 						 uint16_t remainder = logger->streamSend();
 						 return remainder == 0 ;
 					break;
+				}
+				 case BAD_TYPE:
+						break;
 				}
 				//
 				// size+=width*2; // bytes to write the names of each ADDR1
@@ -358,35 +440,18 @@ public:
 				return remainder==0;
 			}
 
-			// void writeVar(uint8_t letter,uint8_t val){
-			//
-			// }
-			// void writeVar(uint8_t letter,uint8_t val){
-			//
-			// }
-			// void writeVar(uint8_t letter,uint8_t val){
-			//
-			// }
-			// void writeVar(uint8_t letter,uint8_t val){
-			//
-			// }
-			// void writeVar(uint8_t letter,uint8_t val){
-			//
-			// }
-
-
 			char* error;
 			Controller* controller;
 			char id;
 
 		private:
 			uint8_t varB[26]={0};
-			uint8_t varU[26]={0};
-			uint8_t varI[26]={0};
-			uint8_t varL[26]={0};
-			uint8_t varF[26]={0};
-			uint8_t varD[26]={0};
-			uint8_t varT[26]={0};
+			uint16_t varU[26]={0};
+			int16_t varI[26]={0};
+			int32_t varL[26]={0};
+			float varF[26]={0};
+			double varD[26]={0};
+			uint32_t varT[26]={0};
 
 		};
 

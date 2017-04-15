@@ -27,7 +27,7 @@ public:
 	}
 
 
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 		uint8_t command = addr.addr%26;
 
 		if (command<8){
@@ -36,7 +36,7 @@ public:
 			return -1;
 	}
 
-	void write(ADDR1 addr,uint16_t val){
+	void writeCon(ADDR1 addr,uint16_t val){
 		uint8_t command = addr.addr%26;
 
 		if (command<8){
@@ -44,7 +44,7 @@ public:
 		}
 	}
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 					digitalWrite(powerPin,val>0);
 	}
 

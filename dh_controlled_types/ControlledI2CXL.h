@@ -26,7 +26,7 @@ public:
 		wire = _wire;
 	}
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 					if (scanning == (val>0))
 						return;
 
@@ -37,16 +37,16 @@ public:
 						startScan();
 					}
 
-	
+
 
 	}
 
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 		return scanning;
 	}
 
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 		if (!scanning)
 			return 0;
 
@@ -63,12 +63,12 @@ public:
 			stopScan();
 		}
 		onA = true;
-		wire->beginTransmission(SensorAddress1);             //Start addressing 
-		wire->write(RangeCommand);                             //send range command 
-		wire->endTransmission(I2C_STOP);  
+		wire->beginTransmission(SensorAddress1);             //Start addressing
+		wire->write(RangeCommand);                             //send range command
+		wire->endTransmission(I2C_STOP);
 
 		controller->schedule(SCAN_ID,SCAN_DELAY,SCAN_DELAY,false,0,Controller::newString("SA"),id,false);
-		
+
 		scanning = true;
 		onA = true;
 	}
@@ -85,39 +85,39 @@ public:
 			return;
 		if(onA){
 			  wire->requestFrom(SensorAddress1, byte(2));
-			  if(wire->available() >= 2){                            //Sensor responded with the two bytes 
-			      byte HighByte = wire->read();                        //Read the high byte back 
-			      byte LowByte = wire->read();                        //Read the low byte back 
-			      readingA  = word(HighByte, LowByte);         //Make a 16-bit word out of the two bytes for the range  
+			  if(wire->available() >= 2){                            //Sensor responded with the two bytes
+			      byte HighByte = wire->read();                        //Read the high byte back
+			      byte LowByte = wire->read();                        //Read the low byte back
+			      readingA  = word(HighByte, LowByte);         //Make a 16-bit word out of the two bytes for the range
 			   }else{
-			      readingA = 0; 
+			      readingA = 0;
 			   }
-				wire->beginTransmission(SensorAddress2);             //Start addressing 
-				wire->write(RangeCommand);                             //send range command 
-				wire->endTransmission(I2C_STOP,100); 
+				wire->beginTransmission(SensorAddress2);             //Start addressing
+				wire->write(RangeCommand);                             //send range command
+				wire->endTransmission(I2C_STOP,100);
 				onA = false;
 		}else{
 			wire->requestFrom(SensorAddress2, byte(2));
-			if(wire->available() >= 2){                            //Sensor responded with the two bytes 
-			    byte HighByte = wire->read();                        //Read the high byte back 
-			    byte LowByte = wire->read();                        //Read the low byte back 
-			    readingB  = word(HighByte, LowByte);         //Make a 16-bit word out of the two bytes for the range  
+			if(wire->available() >= 2){                            //Sensor responded with the two bytes
+			    byte HighByte = wire->read();                        //Read the high byte back
+			    byte LowByte = wire->read();                        //Read the low byte back
+			    readingB  = word(HighByte, LowByte);         //Make a 16-bit word out of the two bytes for the range
 			}else{
-			    readingB = 0; 
+			    readingB = 0;
 			}
-			wire->beginTransmission(SensorAddress1);             //Start addressing 
-			wire->write(RangeCommand);                             //send range command 
-			wire->endTransmission(I2C_STOP,100); 
+			wire->beginTransmission(SensorAddress1);             //Start addressing
+			wire->write(RangeCommand);                             //send range command
+			wire->endTransmission(I2C_STOP,100);
 			onA = true;
 		}
 	}
 
 
 	void startSchedule(char command[], uint32_t id){
-		
+
 	}
 	void endSchedule(char command[], uint32_t id){
-	
+
 	}
 
 	uint16_t readingA;
@@ -132,6 +132,6 @@ private:
 
 };
 
-	
+
 
 #endif

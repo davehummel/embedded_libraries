@@ -115,18 +115,18 @@ public:
 
 	}
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 			return pinVal[addr.addr%26];
 	}
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 			return pinVal[addr.addr%26];
 	}
-	uint32_t readT(ADDR1 addr,uint8_t addr2){
+	uint32_t readConT(ADDR1 addr,uint8_t addr2){
 			return pinVal[addr.addr%26];
 	}
 
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 		uint8_t letter = addr.addr%26;
 		if (pinID[letter] == 0)
 			return;
@@ -140,7 +140,7 @@ public:
 		}
 	}
 
-	void write(ADDR1 addr,uint16_t val){
+	void writeCon(ADDR1 addr,uint16_t val){
 		uint8_t letter = addr.addr%26;
 		if (pinID[letter] == 0)
 			return;

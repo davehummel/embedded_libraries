@@ -125,20 +125,20 @@ void reset (){
 
 	}
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 			return vals[addr.addr%26]/16;
 	}
 
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 			return vals[addr.addr%26];
 	}
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 		uint8_t letter = addr.addr%26;
 		setPin(letter,val*16);
 	}
 
-	void write(ADDR1 addr,uint16_t val){
+	void writeCon(ADDR1 addr,uint16_t val){
 		uint8_t letter = addr.addr%26;
 		setPin(letter,val);
 	}

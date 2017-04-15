@@ -30,6 +30,7 @@ public:
 			}
 			mult*=26;
 		}
+
 		return addr;
 	}
 	static bool parseType(ADDRTYPE &type,char val){
@@ -54,6 +55,7 @@ public:
 		addr = 0;
 		addr = solveADDR(name);
 		type = intype;
+	  isVRVar =  (name[0] == 'V' && name[1] == 'R');
 	}
 
 	ADDR1(uint16_t &offset, const char* text,Print* error = 0){
@@ -76,6 +78,7 @@ public:
 		offset++;
 		addr = 0;
 		uint16_t mult = 1;
+		isVRVar =  (text[offset] == 'V' && text[offset+1] == 'R');
 		for (uint8_t i = 0; i < 3 ; i++){
 			char c = text[i+offset] ;
 			if ( c < 'A' ){
@@ -100,6 +103,11 @@ public:
 		chars[2] = 'A' +temp%26;
 	}
 
+	uint8_t getVRLetter(){
+		return (((uint16_t)addr)/676) % 26; // mod is probably unnecessary but keep it consistant
+	}
+
+  bool isVRVar = false;
 	uint16_t addr = 0;
 	ADDRTYPE type = A_BYTE;
 	char modID = 0;

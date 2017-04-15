@@ -46,7 +46,7 @@ wire = _wire;
 	}
 
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 					if (val>0){
 						startScan();
 					} else {
@@ -54,7 +54,7 @@ wire = _wire;
 					}
 	}
 
-	void write(ADDR1 addr,uint16_t val){
+	void writeCon(ADDR1 addr,uint16_t val){
 					if (val <=20){
 						val = 20;
 					}
@@ -68,11 +68,11 @@ wire = _wire;
 	}
 
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 		return scanning;
 	}
 
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 		if (!scanning)
 			return 0;
 

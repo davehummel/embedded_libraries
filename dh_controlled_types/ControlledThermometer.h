@@ -83,7 +83,7 @@ public:
 
 	}
 
-	void write(ADDR1 addr,float val){
+	void writeCon(ADDR1 addr,float val){
 		uint8_t num = addr.addr%26;
 		if (num>=0 && num < deviceCount ){
 			deviceOffset[num] = val;
@@ -91,7 +91,7 @@ public:
 	}
 
 
-	float readF(ADDR1 addr,uint8_t addr2){
+	float readConF(ADDR1 addr,uint8_t addr2){
 			uint8_t num = addr.addr%26;
 			if (num>=deviceCount){
 				controller->getErrorLogger()->print("Thermo ");

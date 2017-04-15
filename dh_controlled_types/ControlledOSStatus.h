@@ -49,11 +49,11 @@ public:
 
 	}
 
-void write(ADDR1 addr,uint32_t val){
+void writeCon(ADDR1 addr,uint32_t val){
 
 }
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 	//	if (addr.addr == ECD) return controller->getErrorCode();
 		return 0 ;
 	}
@@ -62,13 +62,13 @@ void write(ADDR1 addr,uint32_t val){
 	//
 	// }
 	//
-	uint32_t readT(ADDR1 addr,uint8_t addr2){
+	uint32_t readConT(ADDR1 addr,uint8_t addr2){
 			if (addr.addr == ETM) return controller->getErrorLogger()->getErrorTime();
 			if (addr.addr == TIM) return controller->lastProcessedMSTime;
 			return 0;
 	}
 
-	char* readS(ADDR1 addr,uint8_t addr2){
+	char* readConS(ADDR1 addr,uint8_t addr2){
 			if (addr.addr == INP) return controller->getInputBuffer();
 			if (addr.addr == ETX) return controller->getErrorLogger()->getErrorText();
 		  if (addr.addr == LST) return controller->lastProcessedLine;

@@ -16,11 +16,11 @@ public:
 		wire = _wire;
 	}
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 		return powerOn;
 	}
 
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 		if (!powerOn || delayedOn)
 			return 0;
 
@@ -33,7 +33,7 @@ public:
 		 return distance;
 	}
 
-	void write(ADDR1 addr,uint8_t val){
+	void writeCon(ADDR1 addr,uint8_t val){
 					if (powerOn == (val>0))
 						return;
 

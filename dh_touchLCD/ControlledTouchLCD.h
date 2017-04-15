@@ -191,6 +191,7 @@ public:
 			case A_DOUBLE: print(module->readD(addr1,addr2)); break;
 			case A_TIME: print(module->readT(addr1,addr2)); break;
 			case A_STRING: print(module->readS(addr1,addr2)); break;
+			case BAD_TYPE: print("BAD_TYPE"); break;
 		}
 
 
@@ -1048,6 +1049,8 @@ private:
 		 							case A_TIME: controlled->readT(addr1,addr2);
 		 							break;
 		 							case A_STRING: controlled->readS(addr1,addr2);
+									break;
+									case BAD_TYPE: break;
 		 						}
 							 }
 						}
