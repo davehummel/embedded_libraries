@@ -500,6 +500,7 @@ private:
 	}
 
 	void exe(char command[]){
+		Serial.println("Executing!!!");
 		uint16_t offset = 4;
 		while (command[offset]!='\0'){
 			char modID = command[offset];
