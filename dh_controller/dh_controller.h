@@ -77,6 +77,13 @@ public:
 				return readConL(addr, addr2);
 			}
 			float readF(ADDR1 addr,uint8_t addr2){
+				if (addr.isVRVar){
+					Serial.print ("VR read from ");
+					Serial.print (addr.getVRLetter());
+					Serial.print (" val=");
+					Serial.println(varF[addr.getVRLetter()]);
+				}
+
 				if (addr.isVRVar)
 					return varF[addr.getVRLetter()];
 				return readConF(addr, addr2);
@@ -198,6 +205,12 @@ public:
 						writeCon(addr,val);
 			}
 			void write(ADDR1 addr,float val){
+				if (addr.isVRVar){
+					Serial.print ("VR write to ");
+					Serial.print (addr.getVRLetter());
+					Serial.print (" val=");
+					Serial.println(val);
+				}
 				if (addr.isVRVar)
 					varF[addr.getVRLetter()]=val;
 					else
