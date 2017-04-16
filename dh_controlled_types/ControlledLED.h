@@ -67,6 +67,7 @@ public:
 							pinMode(pID,OUTPUT);
 							analogWrite(pID,0);
 						}else if (isDSC){
+						digitalWrite(pID,LOW);
 							pinMode(pID,INPUT);
 					 }else{
 						 		pinMode(pID,OUTPUT);
@@ -147,6 +148,7 @@ public:
 		}else{
 			if (pinDSC[letter]){
 				if (val==0){
+					digitalWrite(pinID[letter],LOW);
 				  pinMode(pinID[letter],INPUT);
 				}else{
 					pinMode(pinID[letter],OUTPUT);
