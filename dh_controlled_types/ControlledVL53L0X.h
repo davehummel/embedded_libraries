@@ -93,18 +93,14 @@ wire = _wire;
 		if (scanning){
 			stopScan();
 			delay(10);
+			controller->kill(SCAN_ID);
 		}
 		for (int i = 0 ; i < deviceCount ; i++){
 			initDevice(i);
-
 		}
 		started = true;
-
-
 		scanning = true;
-
-			controller->schedule(SCAN_ID,scanRate,scanRate,false,0,Controller::newString("SCAN"),id,false);
-
+		controller->schedule(SCAN_ID,scanRate,scanRate,false,0,Controller::newString("SCAN"),id,false);
 	}
 
 	void stopScan(){
@@ -130,13 +126,15 @@ wire = _wire;
 
 	 for (uint8_t i = 0; i < deviceCount;i++){
 		uint16_t result = devices[i].readRangeContinuousMillimeters(true);
-		if (result != 65535 && result != 0){
+		if (result < 60000 && result >10){
 			values[i] =( result+values[i]*2 )/3;
 			// Serial.print(values[i] );
 			// 			Serial.print(" , ");
 			goodRead[i] = time;
 			retries[i] = 0;
 		} else{
+			controller->getErrorLogger()->print("Error - VL53L0X device #");
+			controller->getErrorLogger()->print(i);
 			if ( time > 2*scanRate + goodRead[i]){
 				if (retries[i] > 24){
 					controller->getErrorLogger()->print("VL53L0X device #");
@@ -145,14 +143,14 @@ wire = _wire;
 					controller->getErrorLogger()->finished(time,ErrorLogger::OS_MISC);
 					return;
 				}
-				controller->getErrorLogger()->print("VL53L0X device #");
-				controller->getErrorLogger()->print(i);
-				controller->getErrorLogger()->println("failed - restarting");
-				controller->getErrorLogger()->finished(time,ErrorLogger::OS_MISC);
+
+				controller->getErrorLogger()->println("Restarting");
+
 				initDevice(i);
 				goodRead[i] = time+5000l;
 				retries[i]++;
 			}
+		controller->getErrorLogger()->finished(time,ErrorLogger::OS_MISC);
 		}
 	 }
 	//  Serial.println();
