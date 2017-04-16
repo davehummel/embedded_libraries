@@ -67,8 +67,7 @@ public:
 							pinMode(pID,OUTPUT);
 							analogWrite(pID,0);
 						}else if (isDSC){
-						digitalWrite(pID,LOW);
-							pinMode(pID,INPUT);
+							pinDisable(pID);
 					 }else{
 						 		pinMode(pID,OUTPUT);
 						  digitalWrite(pID,LOW);
@@ -149,7 +148,9 @@ public:
 			if (pinDSC[letter]){
 				if (val==0){
 					digitalWrite(pinID[letter],LOW);
-				  pinMode(pinID[letter],INPUT);
+					pinDisable(pinID[letter]);
+					// delay(1);
+				  // pinMode(pinID[letter],INPUT);
 				}else{
 					pinMode(pinID[letter],OUTPUT);
 					digitalWrite(pinID[letter],HIGH);
@@ -175,6 +176,14 @@ public:
 	}
 
 private:
+	void pinDisable(const uint8_t pin) {
+	  volatile uint32_t *config;
+	  if (pin >= CORE_NUM_TOTAL_PINS) return;
+	  config = portConfigRegister(pin);
+	  *config = 0;
+	}
+
+
 	void setFreq(uint8_t pin,uint32_t freq){
 		if (pin == 0){
 			analogWriteFrequency(5, freq);
