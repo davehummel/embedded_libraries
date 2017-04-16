@@ -126,7 +126,7 @@ wire = _wire;
 
 	 for (uint8_t i = 0; i < deviceCount;i++){
 		uint16_t result = devices[i].readRangeContinuousMillimeters(true);
-		if (result < 60000 && result >10){
+		if (result < 1000 && result >10){
 			values[i] =( result+values[i]*2 )/3;
 			// Serial.print(values[i] );
 			// 			Serial.print(" , ");
