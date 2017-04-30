@@ -235,10 +235,14 @@ public:
 	uint8_t readB(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
+			Serial.print("Looking for function");
+
 			if (func == 0)
 				return 0;
-			else
+			else{
+					Serial.println("found it");
 				return func->readB();
+			}
 		}
 
 			if (addr.addr == TIME_VARCONST)
