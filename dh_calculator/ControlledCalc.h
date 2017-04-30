@@ -232,16 +232,12 @@ class ISeg{
 class ControlledCalc: public Controller::Controlled{
 public:
 
-	uint8_t readB(ADDR1 addr,uint8_t addr2){
+	uint8_t readConB(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
-				Serial.print("Looking for function,");
 		if (getFunc(func,addr,addr2)){
-	Serial.print("something");
-
 			if (func == 0)
 				return 0;
 			else{
-					Serial.println("found it");
 				return func->readB();
 			}
 		}
@@ -251,7 +247,7 @@ public:
 			return 0;
 
 	}
-	uint16_t readU(ADDR1 addr,uint8_t addr2){
+	uint16_t readConU(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
 			if (func == 0){
@@ -265,7 +261,7 @@ public:
 			return 0;
 
 	}
-	int16_t readI(ADDR1 addr,uint8_t addr2){
+	int16_t readConI(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
 			if (func == 0)
@@ -279,7 +275,7 @@ public:
 			return 0;
 
 	}
-	int32_t readL(ADDR1 addr,uint8_t addr2){
+	int32_t readConL(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
 			if (func == 0)
@@ -293,7 +289,7 @@ public:
 			return 0;
 
 	}
-	float readF(ADDR1 addr,uint8_t addr2){
+	float readConF(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
 			if (func == 0)
@@ -307,7 +303,7 @@ public:
 			return 0;
 
 	}
-	double readD(ADDR1 addr,uint8_t addr2){
+	double readConD(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
 			if (func == 0)
@@ -321,7 +317,7 @@ public:
 			return 0;
 
 	}
-	uint32_t readT(ADDR1 addr,uint8_t addr2){
+	uint32_t readConT(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
 		if (getFunc(func,addr,addr2)){
 			if (func == 0)
@@ -373,7 +369,6 @@ private:
 	bool getFunc(Func* (&match),ADDR1 addr1, uint8_t addr2){
 		char temp[3];
 		addr1.getChars(temp);
-		Serial.print(temp);
 		if (temp[0] == 'F' && temp[1] == 'N'){
 			uint8_t modID = temp[2] - 'A';
 			if (functions[modID] == 0){
