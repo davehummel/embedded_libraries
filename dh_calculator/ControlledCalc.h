@@ -234,8 +234,9 @@ public:
 
 	uint8_t readB(ADDR1 addr,uint8_t addr2){
 		Func* func = 0;
+				Serial.print("Looking for function,");
 		if (getFunc(func,addr,addr2)){
-			Serial.print("Looking for function");
+	Serial.print("something");
 
 			if (func == 0)
 				return 0;
