@@ -373,7 +373,7 @@ private:
 	bool getFunc(Func* (&match),ADDR1 addr1, uint8_t addr2){
 		char temp[3];
 		addr1.getChars(temp);
-		Serial.print(temp3)
+		Serial.print(temp3);
 		if (temp[0] == 'F' && temp[1] == 'N'){
 			uint8_t modID = temp[2] - 'A';
 			if (functions[modID] == 0){
