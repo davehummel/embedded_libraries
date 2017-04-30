@@ -344,7 +344,9 @@ void Controller::processInput(Stream* stream){
 			bufferCount = 0;
 			inputBuffer[0] = '#';
 			inputBuffer[1] = '\0';
-		}else{
+		}else if (next == '`'){
+			 pureInput= !pureInput;
+		} else {
 			dataProcessed = true;
 			inputBuffer[bufferCount] = next;
 			inputBuffer[bufferCount+1] = '\0';

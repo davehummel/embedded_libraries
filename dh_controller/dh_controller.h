@@ -459,7 +459,9 @@ public:
 			if (stream->available()){
 				processInput(stream);
 			}
-			execute();
+			if (!pureInput){
+				execute();
+		 }
 			if (dataProcessed){
 				logger.sendLineSync();
 				dataProcessed = false;
@@ -564,6 +566,7 @@ private:
 	uint32_t lastTickTime = 0;
 
 	bool dataProcessed = false;
+	bool pureInput = false;
 
 	void parseBuffer();
 
