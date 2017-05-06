@@ -136,7 +136,7 @@ wire = _wire;
 			controller->getErrorLogger()->print("Error - VL53L0X device #");
 			controller->getErrorLogger()->print(i);
 			if ( time > 2*scanRate + goodRead[i]){
-				if (retries[i] > 24){
+				if (retries[i] > 64){
 					controller->getErrorLogger()->print("VL53L0X device #");
 					controller->getErrorLogger()->print(i);
 					controller->getErrorLogger()->println("No longer trying to restart");
