@@ -36,7 +36,7 @@ BioloidController::BioloidController(long baud){
     interpolating = 0;
     playing = 0;
     lastframe_ = millis();
-    ax12Init(baud);  
+    ax12Init(baud);
 }
 
 /* new-style setup */
@@ -76,7 +76,7 @@ void BioloidController::loadPose( const unsigned int * addr ){
 void BioloidController::readPose(){
     for(int i=0;i<poseSize;i++){
         pose_[i] = ax12GetRegister(id_[i],AX_PRESENT_POSITION_L,2)<<BIOLOID_SHIFT;
-        delay(25);   
+        delay(25);
     }
 }
 /* write pose out to servos using sync write. */
@@ -99,12 +99,12 @@ void BioloidController::writePose(){
         ax12write(id_[i]);
         ax12write(temp&0xff);
         ax12write(temp>>8);
-    } 
+    }
     ax12write(0xff - (checksum % 256));
     setRX(0);
 }
 
-/* set up for an interpolation from pose to nextpose over TIME 
+/* set up for an interpolation from pose to nextpose over TIME
     milliseconds by setting servo speeds. */
 void BioloidController::interpolateSetup(int time){
     int i;
@@ -144,12 +144,12 @@ void BioloidController::interpolateStep(){
                     pose_[i] = nextpose_[i];
                     complete--;
                 }else
-                    pose_[i] -= speed_[i];                
-            }       
+                    pose_[i] -= speed_[i];
+            }
         }
     }
     if(complete <= 0) interpolating = 0;
-    writePose();      
+    writePose();
 }
 
 /* get a servo value in the current pose */
@@ -178,12 +178,22 @@ void BioloidController::setNextPose(int id, int pos){
     }
 }
 
+/* set a servo value in the current pose */
+void BioloidController::setThisPose(int id, int pos){
+    for(int i=0; i<poseSize; i++){
+        if( id_[i] == id ){
+            pose_[i] = (pos << BIOLOID_SHIFT);
+            return;
+        }
+    }
+}
+
 /* play a sequence. */
 void BioloidController::playSeq( const transition_t  * addr ){
     sequence = (transition_t *) addr;
     // number of transitions left to load
     transitions = pgm_read_word_near(&sequence->time);
-    sequence++;    
+    sequence++;
     // load a transition
     loadPose((const unsigned int *)pgm_read_word_near(&sequence->pose));
     interpolateSetup(pgm_read_word_near(&sequence->time));
@@ -196,7 +206,7 @@ void BioloidController::play(){
     if(interpolating > 0){
         interpolateStep();
     }else{  // move onto next pose
-        sequence++;   
+        sequence++;
         if(transitions > 0){
             loadPose((const unsigned int *)pgm_read_word_near(&sequence->pose));
             interpolateSetup(pgm_read_word_near(&sequence->time));
@@ -206,4 +216,3 @@ void BioloidController::play(){
         }
     }
 }
-

@@ -23,12 +23,12 @@
 /* poses:
  *  PROGMEM prog_uint16_t name[ ] = {4,512,512,482,542}; // first number is # of servos
  * sequences:
- *  PROGMEM transition_t name[] = {{NULL,count},{pose_name,1000},...} 
+ *  PROGMEM transition_t name[] = {{NULL,count},{pose_name,1000},...}
  */
 
 #include "ax12.h"
 
-/* pose engine runs at 30Hz (33ms between frames) 
+/* pose engine runs at 30Hz (33ms between frames)
    recommended values for interpolateSetup are of the form X*BIOLOID_FRAME_LENGTH - 1 */
 #define BIOLOID_FRAME_LENGTH      33
 /* we need some extra resolution, use 13 bits, rather than 10, during interpolation */
@@ -36,9 +36,9 @@
 
 /** a structure to hold transitions **/
 typedef struct{
-    unsigned int * pose;    // addr of pose to transition to 
+    unsigned int * pose;    // addr of pose to transition to
     int time;               // time for transition
-} transition_t; 
+} transition_t;
 
 /** Bioloid Controller Class for mega324p/644p clients. **/
 class BioloidController
@@ -46,26 +46,27 @@ class BioloidController
   public:
     /* For compatibility with legacy code */
     BioloidController(long baud);               // baud usually 1000000
-    
-    /* New-style constructor/setup */ 
+
+    /* New-style constructor/setup */
     BioloidController() {};
     void setup(int servo_cnt);
 
     /* Pose Manipulation */
-    void loadPose( const unsigned int * addr ); // load a named pose from FLASH  
-    void readPose();                            // read a pose in from the servos  
+    void loadPose( const unsigned int * addr ); // load a named pose from FLASH
+    void readPose();                            // read a pose in from the servos
     void writePose();                           // write a pose out to the servos
     int getCurPose(int id);                     // get a servo value in the current pose
     int getNextPose(int id);                    // get a servo value in the next pose
     void setNextPose(int id, int pos);          // set a servo value in the next pose
+    void setThisPose(int id,int pos);      //set a servo value for the current pose
     void setId(int index, int id);              // set the id of a particular storage index
     int getId(int index);                       // get the id of a particular storage index
-    
+
     /* Pose Engine */
     void interpolateSetup(int time);            // calculate speeds for smooth transition
-    void interpolateStep();                     // move forward one step in current interpolation  
+    void interpolateStep();                     // move forward one step in current interpolation
     unsigned char interpolating;                // are we in an interpolation? 0=No, 1=Yes
-    unsigned char runningSeq;                   // are we running a sequence? 0=No, 1=Yes 
+    unsigned char runningSeq;                   // are we running a sequence? 0=No, 1=Yes
     int poseSize;                               // how many servos are in this pose, used by Sync()
 
     /* to interpolate:
@@ -88,17 +89,17 @@ class BioloidController
      *      bioloid.play();
      *  }
      */
-    
-  private:  
+
+  private:
     unsigned int * pose_;                       // the current pose, updated by Step(), set out by Sync()
     unsigned int * nextpose_;                   // the destination pose, where we put on load
-    int * speed_;                               // speeds for interpolation 
+    int * speed_;                               // speeds for interpolation
     unsigned char * id_;                        // servo id for this index
 
-    unsigned long lastframe_;                   // time last frame was sent out  
-    
+    unsigned long lastframe_;                   // time last frame was sent out
+
     transition_t * sequence;                    // sequence we are running
     int transitions;                            // how many transitions we have left to load
-   
+
 };
 #endif
