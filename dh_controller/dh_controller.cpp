@@ -44,7 +44,7 @@ Controller::Controlled* Controller::getControlled(char id){
 	return library[val];
 }
 
-void Controller::schedule(uint32_t id, uint16_t initialExecDelay,  uint16_t executeInterval,
+void Controller::schedule(uint32_t id, uint32_t initialExecDelay,  uint32_t executeInterval,
 bool additiveInterval, uint32_t runCount, char command[],char controlled,uint8_t style){
 
 
@@ -464,8 +464,8 @@ void Controller::parseBuffer(){
 
 
 		uint32_t id = 0;
-		uint16_t timeDelay;
-		uint16_t timeInterval;
+		uint32_t timeDelay;
+		uint32_t timeInterval;
 		uint16_t offset = 3;
 		uint8_t style;
 		if (inputBuffer[1] == 'C'){
@@ -494,7 +494,7 @@ void Controller::parseBuffer(){
 
 		offset += 2;
 
-		if (!parse_uint16(timeDelay, offset, inputBuffer)){
+		if (!parse_uint32(timeDelay, offset, inputBuffer)){
 			error.setParseError(inputBuffer,offset,"Bad start delay (ms)");
 			error.finished(lastProcessedMSTime,ErrorLogger::OS_PARSER);
 			return;
@@ -502,7 +502,7 @@ void Controller::parseBuffer(){
 
 		offset++;
 
-		if (!parse_uint16(timeInterval, offset, inputBuffer)){
+		if (!parse_uint32(timeInterval, offset, inputBuffer)){
 			error.setParseError(inputBuffer,offset,"Bad interval time (ms)");
 			error.finished(lastProcessedMSTime,ErrorLogger::OS_PARSER);
 			return;

@@ -472,7 +472,7 @@ public:
 
 	Controlled* getControlled(char id);
 
-	void schedule(uint32_t id, uint16_t initialExecDelay, uint16_t executeInterval,bool additiveInterval, uint32_t runCount,char command[],char controlled,uint8_t style = COMMAND);
+	void schedule(uint32_t id, uint32_t initialExecDelay, uint32_t executeInterval,bool additiveInterval, uint32_t runCount,char command[],char controlled,uint8_t style = COMMAND);
 
 	void run(uint32_t id,char command[],uint8_t controlled,uint8_t style = COMMAND);
 
@@ -535,10 +535,10 @@ private:
 		char* command;
 		uint8_t style;
 		Controlled *controlled;
-		uint16_t executeInterval;
+		uint32_t executeInterval;
 		uint32_t runCount;
 		uint32_t nextExecuteTime;
-		uint32_t additiveInterval;
+		bool additiveInterval;
 		bool killed;
 	};
 
