@@ -62,10 +62,10 @@ public:
 	void execute(uint32_t time,uint32_t id,char command[]){
 		if (id == SCAN_ID && command[0] == 'S'){
 			values[devScan]= readTemp(devScan) + deviceOffset[devScan];
-			    //  Serial.print("Thermo:");
-					//  Serial.print(deviceAddr[devScan][1],HEX);
-					//  Serial.print("=");
-					// 	Serial.println(	values[devScan]);
+			     Serial.print("Thermo:");
+					 Serial.print(deviceAddr[devScan][1],HEX);
+					 Serial.print("=");
+						Serial.println(	values[devScan]);
 			devScan++;
 			if (devScan>=deviceCount)
 				devScan = 0;
