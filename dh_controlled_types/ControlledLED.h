@@ -146,6 +146,7 @@ public:
 			analogWrite(pinID[letter],pinVal[letter]=val);
 		}else{
 			if (pinDSC[letter]){
+				pinVal[letter] = val;
 				if (val==0){
 					digitalWrite(pinID[letter],LOW);
 					pinDisable(pinID[letter]);
