@@ -33,6 +33,15 @@ public:
 				for (uint8_t i = 0; i < deviceCount ; i++){
 					if (addr[1] == deviceAddr[i][1])
 					  memcpy(deviceAddr[i],addr, sizeof(byte)*8);
+						 ds.reset();             // rest 1-Wire
+				    ds.select(addr);        // select DS18B20
+
+				    ds.write(0x4E);         // write on scratchPad
+				    ds.write(0x00);         // User byte 0 - Unused
+				    ds.write(0x00);         // User byte 1 - Unused
+				    ds.write(0x7F);         // set up en 12 bits (0x7F)
+
+				    ds.reset();             // reset 1-Wire
 				}
 			}
 			ds->reset_search();
@@ -69,8 +78,8 @@ public:
 			devScan++;
 			if (devScan>=deviceCount)
 				devScan = 0;
-				startConversion(devScan);
-				return;
+			startConversion(devScan);
+			return;
 		}else{
 			startScan();
 		};
