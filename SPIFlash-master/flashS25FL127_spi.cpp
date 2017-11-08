@@ -187,8 +187,7 @@ void flash_hard_reset(void)
 
 //=====================================
 // Tbe Typ=13sec  Max=40sec
-void
-(boolean wait)
+boolean wait(void)
 {
   write_pause();
   // Send Write Enable command
