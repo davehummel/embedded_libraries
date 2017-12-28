@@ -75,8 +75,10 @@ class ControlledRF24 : public Controller::Controlled
 			//Ping command
 			if (pipeOpen[pingPipeIterator])
 			{
+#ifdef DEBUG
 				Serial.print("Pinging ");
 				Serial.print(pingPipeIterator);
+#endif
 				bool success = rawWrite(pingPipeIterator, 255, (double)millis());
 				if (success && pipePingFailed[pingPipeIterator] > 0)
 				{
@@ -86,11 +88,13 @@ class ControlledRF24 : public Controller::Controlled
 				{
 					pipePingFailed[pingPipeIterator]++;
 				}
+#ifdef DEBUG
 				if (!success)
 					Serial.print("!!!!!++");
 				else
 					Serial.print("     --");
 				Serial.println(pipePingFailed[pingPipeIterator]);
+#endif
 			}
 			pingPipeIterator++;
 			if (pingPipeIterator > 4)
@@ -121,8 +125,6 @@ class ControlledRF24 : public Controller::Controlled
 			}
 
 			radio.openReadingPipe(pipeNum + 1, pipeReadName[pipeNum]);
-			Serial.println(pipeNum);
-			Serial.println((char *)pipeReadName[pipeNum]);
 			pipeOpen[pipeNum] = true;
 		}
 	}
@@ -150,13 +152,14 @@ class ControlledRF24 : public Controller::Controlled
 		}
 
 		uint8_t letter = (addr.addr / 26) % 26;
-
+#ifdef DEBUG
 		Serial.print("Sending to pipe ");
 		Serial.print(pipeNum);
 		Serial.print(" to letter ");
 		Serial.print(letter);
 		Serial.print(" value ");
 		Serial.println(val);
+#endif
 
 		rawWrite(pipeNum, letter, val);
 	}
@@ -196,6 +199,25 @@ class ControlledRF24 : public Controller::Controlled
 		uint8_t letter = (addr.addr / 26) % 26;
 
 		return readCache[pipeNum][letter];
+	}
+
+	float readConF(ADDR1 addr, uint8_t addr2)
+	{
+		uint8_t pipeNum = addr.addr % 26;
+
+		if (pipeNum >= 5)
+		{
+			return 0;
+		}
+
+		if (pipeOpen[pipeNum] == false)
+		{
+			return 0;
+		}
+
+		uint8_t letter = (addr.addr / 26) % 26;
+
+		return (float)readCache[pipeNum][letter];
 	}
 
 	uint8_t readConB(ADDR1 addr, uint8_t addr2)
