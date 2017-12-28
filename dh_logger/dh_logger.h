@@ -5,72 +5,110 @@
 #include <Arduino.h>
 
 #define HEADER_SIZE 9
-#define ERR_BUFF 1024
-#define LOG_BUFF 1024
+#define ERR_BUFF 128
+#define LOG_BUFF 128
 
 enum ADDRTYPE
 {
-	A_BYTE,A_UINT,A_INT,A_TIME,A_LONG,A_FLOAT,A_DOUBLE,A_STRING,BAD_TYPE
+	A_BYTE,
+	A_UINT,
+	A_INT,
+	A_TIME,
+	A_LONG,
+	A_FLOAT,
+	A_DOUBLE,
+	A_STRING,
+	BAD_TYPE
 };
 
-
-
-class ADDR1{
-public:
-	static uint16_t solveADDR(const char* name){
+class ADDR1
+{
+  public:
+	static uint16_t solveADDR(const char *name)
+	{
 		uint addr = 0;
 		uint16_t mult = 1;
-		for (uint8_t i = 0; i < 3 ; i++){
-			if (name[i] < 'A' ){
+		for (uint8_t i = 0; i < 3; i++)
+		{
+			if (name[i] < 'A')
+			{
 				continue;
-			}else if (name[i] <= 'Z'){
-				addr+= (name[i] - 'A')*mult;
-			}else if (name[i] >= 'a' && name [i] <= 'z'){
-				addr+= (name[i] - 'a')*mult;
 			}
-			mult*=26;
+			else if (name[i] <= 'Z')
+			{
+				addr += (name[i] - 'A') * mult;
+			}
+			else if (name[i] >= 'a' && name[i] <= 'z')
+			{
+				addr += (name[i] - 'a') * mult;
+			}
+			mult *= 26;
 		}
 
 		return addr;
 	}
-	static bool parseType(ADDRTYPE &type,char val){
-		switch (val){
-			case 'B': type = A_BYTE;return true;
-			case 'U': type = A_UINT;return true;
-			case 'I': type = A_INT;return true;
-			case 'L': type = A_LONG;return true;
-			case 'F': type = A_FLOAT;return true;
-			case 'D': type = A_DOUBLE;return true;
-			case 'T': type = A_TIME;return true;
-			case 'S': type = A_STRING;return true;
+	static bool parseType(ADDRTYPE &type, char val)
+	{
+		switch (val)
+		{
+		case 'B':
+			type = A_BYTE;
+			return true;
+		case 'U':
+			type = A_UINT;
+			return true;
+		case 'I':
+			type = A_INT;
+			return true;
+		case 'L':
+			type = A_LONG;
+			return true;
+		case 'F':
+			type = A_FLOAT;
+			return true;
+		case 'D':
+			type = A_DOUBLE;
+			return true;
+		case 'T':
+			type = A_TIME;
+			return true;
+		case 'S':
+			type = A_STRING;
+			return true;
 		}
 		return false;
 	}
 
-	ADDR1(){
-
+	ADDR1()
+	{
 	}
 
-	ADDR1(const char* name , ADDRTYPE intype){
+	ADDR1(const char *name, ADDRTYPE intype)
+	{
 		addr = 0;
 		addr = solveADDR(name);
 		type = intype;
-	  isVRVar =  (name[0] == 'V' && name[1] == 'R');
+		isVRVar = (name[0] == 'V' && name[1] == 'R');
 	}
 
-	ADDR1(uint16_t &offset, const char* text,Print* error = 0){
-		if (! parseType(type,text[offset])){
-			if (error) error->println("Unable to parse Addr type, expected on of [B,U,I,L,F,D,T,S]");
+	ADDR1(uint16_t &offset, const char *text, Print *error = 0)
+	{
+		if (!parseType(type, text[offset]))
+		{
+			if (error)
+				error->println("Unable to parse Addr type, expected on of [B,U,I,L,F,D,T,S]");
 			type = BAD_TYPE;
 			return;
 		}
 		offset++;
 		modID = text[offset];
-		if (modID<'A' || modID > 'Z')
+		if (modID < 'A' || modID > 'Z')
 			modID = 'A';
 		offset++;
-		if (text[offset]!=':'){
-			if (error) error->println("Missing ':' in address, expected T(ype)M(od):ADR(ess)");
+		if (text[offset] != ':')
+		{
+			if (error)
+				error->println("Missing ':' in address, expected T(ype)M(od):ADR(ess)");
 			addr = 0;
 			type = BAD_TYPE;
 			return;
@@ -78,43 +116,51 @@ public:
 		offset++;
 		addr = 0;
 		uint16_t mult = 1;
-		isVRVar =  (text[offset] == 'V' && text[offset+1] == 'R');
-		for (uint8_t i = 0; i < 3 ; i++){
-			char c = text[i+offset] ;
-			if ( c < 'A' ){
+		isVRVar = (text[offset] == 'V' && text[offset + 1] == 'R');
+		for (uint8_t i = 0; i < 3; i++)
+		{
+			char c = text[i + offset];
+			if (c < 'A')
+			{
 				continue;
-			}else if (c <= 'Z'){
-				addr+= (c- 'A')*mult;
-			}else if (c>= 'a' && c <= 'z'){
-				addr+= (c- 'a')*mult;
 			}
-			mult*=26;
+			else if (c <= 'Z')
+			{
+				addr += (c - 'A') * mult;
+			}
+			else if (c >= 'a' && c <= 'z')
+			{
+				addr += (c - 'a') * mult;
+			}
+			mult *= 26;
 		}
-		offset+=3;
-
+		offset += 3;
 	}
 
-	void getChars(char* chars){
+	void getChars(char *chars)
+	{
 		uint16_t temp = addr;
-		chars[0] = 'A'+ temp%26;
-		temp/=26;
-		chars[1] = 'A' +temp%26;
-		temp/=26;
-		chars[2] = 'A' +temp%26;
+		chars[0] = 'A' + temp % 26;
+		temp /= 26;
+		chars[1] = 'A' + temp % 26;
+		temp /= 26;
+		chars[2] = 'A' + temp % 26;
 	}
 
-	uint8_t getVRLetter(){
-		return (((uint16_t)addr)/676) % 26; // mod is probably unnecessary but keep it consistant
+	uint8_t getVRLetter()
+	{
+		return (((uint16_t)addr) / 676) % 26; // mod is probably unnecessary but keep it consistant
 	}
 
-  bool isVRVar = false;
+	bool isVRVar = false;
 	uint16_t addr = 0;
 	ADDRTYPE type = A_BYTE;
 	char modID = 0;
 };
 
-class Logger{
-public:
+class Logger
+{
+  public:
 	bool print(int8_t val);
 	bool print(uint8_t val);
 	bool print(uint16_t val);
@@ -132,14 +178,14 @@ public:
 	bool batchSend();
 	void sendTimeSync(uint32_t time);
 	void sendLineSync();
-	void setStream(Stream* in);
+	void setStream(Stream *in);
 	void abortSend();
 
-private:
+  private:
 	bool validate(uint8_t size);
 	void flushBuffer();
 	void setHeader(uint16_t length);
-	Stream* stream;
+	Stream *stream;
 	uint8_t byteCount = HEADER_SIZE;
 	uint16_t streamRemainder;
 	char module;
@@ -149,15 +195,20 @@ private:
 	bool inBatchSend = false;
 };
 
-class ErrorLogger: public Print{
-public:
-	enum ERROR_CODE{
-		NONE,OS_PARSER,OS_MISC,MOD_PARSER
+class ErrorLogger : public Print
+{
+  public:
+	enum ERROR_CODE
+	{
+		NONE,
+		OS_PARSER,
+		OS_MISC,
+		MOD_PARSER
 	};
 
- Stream* stream = 0;
+	Stream *stream = 0;
 
-	char* getErrorText();
+	char *getErrorText();
 
 	uint32_t getErrorTime();
 
@@ -169,20 +220,19 @@ public:
 
 	void finished(uint32_t time, ERROR_CODE code);
 
-  virtual size_t write(uint8_t);
+	virtual size_t write(uint8_t);
 
-	void setParseError(char input[],uint16_t charPos,const char* message);
+	void setParseError(char input[], uint16_t charPos, const char *message);
 
-private:
-
+  private:
 	char errorBuffer[ERR_BUFF];
-	uint16_t errBufCount=0;
+	uint16_t errBufCount = 0;
 
 	bool errorComplete = false;
 
 	bool hasParseError = false;
 
-  uint16_t charLoc;
+	uint16_t charLoc;
 
 	ERROR_CODE errorCode = NONE;
 	uint32_t errorTime;

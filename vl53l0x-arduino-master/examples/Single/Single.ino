@@ -7,7 +7,7 @@
 
  The range readings are in units of mm. */
 
-#include <Wire.h>
+#include <i2c_t3.h>
 #include <VL53L0X.h>
 
 VL53L0X sensor;
@@ -28,12 +28,21 @@ VL53L0X sensor;
 // - higher accuracy at the cost of lower speed
 
 //#define HIGH_SPEED
-//#define HIGH_ACCURACY
+#define HIGH_ACCURACY
 
 
 void setup()
 {
+  pinMode(16,OUTPUT);
+  digitalWrite(16,HIGH);
+  pinMode(17,OUTPUT);
+  digitalWrite(17,LOW);
+  pinMode(20,OUTPUT);
+  digitalWrite(20,HIGH);
+  
   Serial.begin(9600);
+  delay(10000);
+  Serial.println("start");
   Wire.begin();
 
   sensor.init();
@@ -62,4 +71,5 @@ void loop()
   if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
 
   Serial.println();
+  delay(1000);
 }
