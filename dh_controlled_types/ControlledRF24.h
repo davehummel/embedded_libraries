@@ -92,15 +92,19 @@ class ControlledRF24 : public Controller::Controlled
 				}
 
 				if (!success){
-					//Serial.print("!!!!!++");
+          #ifdef DEBUG
+					Serial.print("!!!!!++");
+          #endif
           controller->getErrorLogger()->print("nRF24 ping failed on:");
           controller->getErrorLogger()->print(pingPipeIterator);
           controller->getErrorLogger()->print(" and count is ");
           controller->getErrorLogger()->print(pipePingFailed[pingPipeIterator]++);
           controller->getErrorLogger()->finished(controller->lastProcessedMSTime, ErrorLogger::MOD_PARSER);
 				}else{
-					//Serial.print("     --");
+            #ifdef DEBUG
+					Serial.print("     --");
   				Serial.println(pipePingFailed[pingPipeIterator]);
+          #endif
         }
 			}
 			pingPipeIterator++;
