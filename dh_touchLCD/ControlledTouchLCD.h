@@ -667,7 +667,7 @@ public:
 		}
 
 		if (!Controller::parse_uint16(w,pointer,text)){
-			Serial.println("Couldnt read radius");
+			Serial.println("Couldnt read length");
 			return false;
 		}
 
