@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include "RF24.h"
 
-#define DEBUG
+#define DEBUG 1
 
 #define RF_SCAN_ID 692
 #define RF_SCAN_DELAY 100
