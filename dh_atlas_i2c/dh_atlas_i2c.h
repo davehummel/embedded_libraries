@@ -71,9 +71,9 @@ public:
 		uint8_t data[10];
 		while (true){
       //        Serial.print("reading:");
-			if (!readBytes(data,10)){
-        return -9999;
-      }
+		if (!readBytes(data,10)){
+			return -9999;
+		}
 			uint8_t input = data[0];
       // Serial.print(input);
       // Serial.print(":");
@@ -88,7 +88,7 @@ public:
 				triggerMeasurement();
 			}
 			// Assumed input = 254 .. wait
-			delay(10);
+			delay(100);
 		}
 		char rawData[20] ;
 
