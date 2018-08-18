@@ -488,9 +488,11 @@ class Controller
 			uint16_t remainder = logger->streamSend();
 			if (remainder > 0)
 			{
+#ifdef DEBUG
 				Serial.print('X');
 				Serial.print(remainder);
 				Serial.print('X');
+#endif
 			}
 			return remainder == 0;
 		}

@@ -331,9 +331,10 @@ uint16_t targetCount = 0; // THis is used to track killed count  and copy back w
 void Controller::processInput(Stream* stream){
 	while (stream->available()){
 		char next = stream->read();
-
+	//	Serial.print(next);
 		if (next == '\n'||next == '\r'){
-
+			Serial.print(">>");
+		  Serial.println(inputBuffer);
 			parseBuffer();
 
 				memcpy (lastProcessedLine,inputBuffer,(bufferCount<254?bufferCount:254));
