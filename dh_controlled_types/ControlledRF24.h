@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include "RF24.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #define RF_SCAN_ID 692
 #define RF_SCAN_DELAY 100
@@ -91,21 +91,24 @@ class ControlledRF24 : public Controller::Controlled
 					pipePingFailed[pingPipeIterator]++;
 				}
 
-				if (!success){
-          #ifdef DEBUG
+				if (!success)
+				{
+#ifdef DEBUG
 					Serial.print("!!!!!++");
-          #endif
-          controller->getErrorLogger()->print("nRF24 ping failed on:");
-          controller->getErrorLogger()->print(pingPipeIterator);
-          controller->getErrorLogger()->print(" and count is ");
-          controller->getErrorLogger()->print(pipePingFailed[pingPipeIterator]++);
-          controller->getErrorLogger()->finished(controller->lastProcessedMSTime, ErrorLogger::MOD_PARSER);
-				}else{
-            #ifdef DEBUG
+#endif
+					controller->getErrorLogger()->print("nRF24 ping failed on:");
+					controller->getErrorLogger()->print(pingPipeIterator);
+					controller->getErrorLogger()->print(" and count is ");
+					controller->getErrorLogger()->print(pipePingFailed[pingPipeIterator]++);
+					controller->getErrorLogger()->finished(controller->lastProcessedMSTime, ErrorLogger::MOD_PARSER);
+				}
+				else
+				{
+#ifdef DEBUG
 					Serial.print("     --");
-  				Serial.println(pipePingFailed[pingPipeIterator]);
-          #endif
-        }
+					Serial.println(pipePingFailed[pingPipeIterator]);
+#endif
+				}
 			}
 			pingPipeIterator++;
 			if (pingPipeIterator > 4)
