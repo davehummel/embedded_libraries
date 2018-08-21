@@ -30,6 +30,7 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			controller->getErrorLogger()->println("nRF24 radio failed to start.");
 			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+
 			return;
 		}
 
@@ -37,7 +38,7 @@ class ControlledRF24 : public Controller::Controlled
 #ifdef DEBUG
 		Serial1.println("Started listneing");
 #endif
-
+		started = true;
 		controller->schedule(RF_SCAN_ID, 0, RF_SCAN_DELAY, false, 0, Controller::newString("S"), id, false);
 		controller->schedule(RF_PING_ID, 0, RF_PING_DELAY, false, 0, Controller::newString("P"), id, false);
 	}
@@ -46,6 +47,13 @@ class ControlledRF24 : public Controller::Controlled
 	{
 		if (id == RF_SCAN_ID && command[0] == 'S')
 		{
+			if (!started)
+			{
+				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+				return;
+			}
+
 			uint8_t pipeNum;
 			while (radio.available(&pipeNum))
 			{
@@ -85,6 +93,12 @@ class ControlledRF24 : public Controller::Controlled
 			//Ping command
 			if (pipeOpen[pingPipeIterator])
 			{
+				if (!started)
+				{
+					controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+					controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+					return;
+				}
 #ifdef DEBUG
 				Serial1.print("Pinging ");
 				Serial1.print(pingPipeIterator);
@@ -124,6 +138,12 @@ class ControlledRF24 : public Controller::Controlled
 		}
 		else if (command[0] == 'C')
 		{ //CONNECT A DPT1
+			if (!started)
+			{
+				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+				return;
+			}
 			uint8_t pipeNum = toupper(command[8]) - 'A';
 			if (pipeNum > 4)
 			{
@@ -160,6 +180,13 @@ class ControlledRF24 : public Controller::Controlled
 
 	void writeCon(ADDR1 addr, double val)
 	{
+
+		if (!started)
+		{
+			controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+			return;
+		}
 
 		uint8_t pipeNum = addr.addr % 26;
 
@@ -261,6 +288,8 @@ class ControlledRF24 : public Controller::Controlled
 
   private:
 	RF24 radio;
+
+	bool started = false;
 
 	uint8_t pipePingFailed[5] = {0};
 
