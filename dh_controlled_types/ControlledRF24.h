@@ -30,7 +30,7 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			controller->getErrorLogger()->println("nRF24 radio failed to start.");
 			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
-			return;
+			//return;
 		}
 
 		radio.startListening();
