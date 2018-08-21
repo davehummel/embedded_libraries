@@ -26,7 +26,12 @@ class ControlledRF24 : public Controller::Controlled
 
 	void begin(void)
 	{
-		radio.begin();
+		if (!radio.begin())
+		{
+			controller->getErrorLogger()->println("nRF24 radio failed to start.");
+			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+			return;
+		}
 
 		radio.startListening();
 #ifdef DEBUG
