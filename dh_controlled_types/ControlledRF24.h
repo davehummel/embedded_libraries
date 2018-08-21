@@ -30,7 +30,7 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			controller->getErrorLogger()->println("nRF24 radio failed to start.");
 			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
-			//return;
+			return;
 		}
 
 		radio.startListening();
@@ -59,7 +59,7 @@ class ControlledRF24 : public Controller::Controlled
 				{
 #ifdef DEBUG
 					Serial1.print("Got message on pipe");
-					Serial1.print(pipeNum);
+					Serial1.print(pipeNum - 1);
 					Serial1.print(" [ ");
 					for (uint8_t a = 0; a < 9; a++)
 					{
