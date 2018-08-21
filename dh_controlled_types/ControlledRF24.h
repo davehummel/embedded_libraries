@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include "RF24.h"
 
-//#define DEBUG 1
+#define DEBUG 1
 
 #define RF_SCAN_ID 692
 #define RF_SCAN_DELAY 100
@@ -29,6 +29,9 @@ class ControlledRF24 : public Controller::Controlled
 		radio.begin();
 
 		radio.startListening();
+#ifdef DEBUG
+		Serial1.println("Started listneing");
+#endif
 
 		controller->schedule(RF_SCAN_ID, 0, RF_SCAN_DELAY, false, 0, Controller::newString("S"), id, false);
 		controller->schedule(RF_PING_ID, 0, RF_PING_DELAY, false, 0, Controller::newString("P"), id, false);
@@ -50,19 +53,19 @@ class ControlledRF24 : public Controller::Controlled
 				if (letter < 26)
 				{
 #ifdef DEBUG
-					Serial.print("Got message on pipe");
-					Serial.print(pipeNum);
-					Serial.print(" [ ");
+					Serial1.print("Got message on pipe");
+					Serial1.print(pipeNum);
+					Serial1.print(" [ ");
 					for (uint8_t a = 0; a < 9; a++)
 					{
-						Serial.print(buffer[a]);
-						Serial.print(" ");
+						Serial1.print(buffer[a]);
+						Serial1.print(" ");
 					}
-					Serial.print("] = ");
+					Serial1.print("] = ");
 #endif
 					memcpy(&readCache[pipeNum - 1][letter], &buffer[1], 8);
 #ifdef DEBUG
-					Serial.println(readCache[pipeNum - 1][letter]);
+					Serial1.println(readCache[pipeNum - 1][letter]);
 #endif
 				}
 				else
@@ -78,8 +81,8 @@ class ControlledRF24 : public Controller::Controlled
 			if (pipeOpen[pingPipeIterator])
 			{
 #ifdef DEBUG
-				Serial.print("Pinging ");
-				Serial.print(pingPipeIterator);
+				Serial1.print("Pinging ");
+				Serial1.print(pingPipeIterator);
 #endif
 				bool success = rawWrite(pingPipeIterator, 255, (double)millis());
 				if (success && pipePingFailed[pingPipeIterator] > 0)
@@ -94,7 +97,7 @@ class ControlledRF24 : public Controller::Controlled
 				if (!success)
 				{
 #ifdef DEBUG
-					Serial.print("!!!!!++");
+					Serial1.print("!!!!!++");
 #endif
 					controller->getErrorLogger()->print("nRF24 ping failed on:");
 					controller->getErrorLogger()->print(pingPipeIterator);
@@ -105,8 +108,8 @@ class ControlledRF24 : public Controller::Controlled
 				else
 				{
 #ifdef DEBUG
-					Serial.print("     --");
-					Serial.println(pipePingFailed[pingPipeIterator]);
+					Serial1.print("     --");
+					Serial1.println(pipePingFailed[pingPipeIterator]);
 #endif
 				}
 			}
@@ -167,12 +170,12 @@ class ControlledRF24 : public Controller::Controlled
 
 		uint8_t letter = (addr.addr / 26) % 26;
 #ifdef DEBUG
-		Serial.print("Sending to pipe ");
-		Serial.print(pipeNum);
-		Serial.print(" to letter ");
-		Serial.print(letter);
-		Serial.print(" value ");
-		Serial.println(val);
+		Serial1.print("Sending to pipe ");
+		Serial1.print(pipeNum);
+		Serial1.print(" to letter ");
+		Serial1.print(letter);
+		Serial1.print(" value ");
+		Serial1.println(val);
 #endif
 
 		rawWrite(pipeNum, letter, val);
