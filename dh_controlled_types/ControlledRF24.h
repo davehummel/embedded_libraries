@@ -26,8 +26,9 @@ class ControlledRF24 : public Controller::Controlled
 
 	void begin(void)
 	{
-		if (!radio.begin())
+		//if (!radio.begin())
 		{
+			Serial1.println("nRF24 radio failed to start.");
 			controller->getErrorLogger()->println("nRF24 radio failed to start.");
 			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 
@@ -90,6 +91,12 @@ class ControlledRF24 : public Controller::Controlled
 		}
 		else if (id == RF_PING_ID && command[0] == 'P')
 		{
+			if (!started)
+			{
+				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+				return;
+			}
 			//Ping command
 			if (pipeOpen[pingPipeIterator])
 			{
