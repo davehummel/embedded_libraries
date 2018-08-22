@@ -324,6 +324,6 @@ void ErrorLogger::finished(uint32_t time, ERROR_CODE code)
 	errorCode = code;
 	if (stream != 0)
 	{
-		stream->println(getErrorText());
+		stream->print(getErrorText());
 	}
 }
