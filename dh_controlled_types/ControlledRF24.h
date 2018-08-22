@@ -50,8 +50,9 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			if (!started)
 			{
-				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+				Serial1.println("nRF24 NOT ENABLED.");
+				// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 				return;
 			}
 
@@ -93,19 +94,15 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			if (!started)
 			{
-				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+				Serial1.println("nRF24 NOT ENABLED.");
+				// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 				return;
 			}
 			//Ping command
 			if (pipeOpen[pingPipeIterator])
 			{
-				if (!started)
-				{
-					controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-					controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
-					return;
-				}
+
 #ifdef DEBUG
 				Serial1.print("Pinging ");
 				Serial1.print(pingPipeIterator);
@@ -147,8 +144,9 @@ class ControlledRF24 : public Controller::Controlled
 		{ //CONNECT A DPT1
 			if (!started)
 			{
-				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+				Serial1.println("nRF24 NOT ENABLED.");
+				// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 				return;
 			}
 			uint8_t pipeNum = toupper(command[8]) - 'A';
@@ -190,8 +188,9 @@ class ControlledRF24 : public Controller::Controlled
 
 		if (!started)
 		{
-			controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+			Serial1.println("nRF24 NOT ENABLED.");
+			// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+			// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 			return;
 		}
 
