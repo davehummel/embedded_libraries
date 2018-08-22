@@ -29,8 +29,8 @@ class ControlledRF24 : public Controller::Controlled
 		//if (!radio.begin())
 		{
 			Serial1.println("nRF24 radio failed to start.");
-			controller->getErrorLogger()->println("nRF24 radio failed to start.");
-			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+			// controller->getErrorLogger()->println("nRF24 radio failed to start.");
+			// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 
 			return;
 		}
