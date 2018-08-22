@@ -571,7 +571,7 @@ void RF24::printDetails(void)
 
 bool RF24::begin(void)
 {
-
+  Serial1.print("Begin:");
   uint8_t setup=0;
 
   #if defined (RF24_LINUX)
