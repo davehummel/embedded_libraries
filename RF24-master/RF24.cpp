@@ -652,6 +652,8 @@ bool RF24::begin(void)
     p_variant = true ;
   }
   setup = read_register(RF_SETUP);
+  Serial1.print("Setup:");
+  Serial1.println(setup);
   /*if( setup == 0b00001110 )     // register default for nRF24L01P
   {
     p_variant = true ;
