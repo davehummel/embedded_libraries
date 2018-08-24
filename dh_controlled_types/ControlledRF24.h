@@ -26,11 +26,11 @@ class ControlledRF24 : public Controller::Controlled
 
 	void begin(void)
 	{
-		//if (!radio.begin())
+		if (!radio.begin())
 		{
-			Serial1.println("nRF24 radio failed to start.");
-			// controller->getErrorLogger()->println("nRF24 radio failed to start.");
-			// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+
+			controller->getErrorLogger()->println("nRF24 radio failed to start.");
+			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 
 			return;
 		}
@@ -50,9 +50,9 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			if (!started)
 			{
-				Serial1.println("nRF24 NOT ENABLED.");
-				// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-				// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+
+				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 				return;
 			}
 
@@ -94,9 +94,9 @@ class ControlledRF24 : public Controller::Controlled
 		{
 			if (!started)
 			{
-				Serial1.println("nRF24 NOT ENABLED.");
-				// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-				// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+
+				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 				return;
 			}
 			//Ping command
@@ -144,9 +144,9 @@ class ControlledRF24 : public Controller::Controlled
 		{ //CONNECT A DPT1
 			if (!started)
 			{
-				Serial1.println("nRF24 NOT ENABLED.");
-				// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-				// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+
+				controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+				controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 				return;
 			}
 			uint8_t pipeNum = toupper(command[8]) - 'A';
@@ -188,9 +188,8 @@ class ControlledRF24 : public Controller::Controlled
 
 		if (!started)
 		{
-			Serial1.println("nRF24 NOT ENABLED.");
-			// controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
-			// controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
+			controller->getErrorLogger()->println("nRF24 NOT ENABLED.");
+			controller->getErrorLogger()->finished(millis(), ErrorLogger::MOD_PARSER);
 			return;
 		}
 
