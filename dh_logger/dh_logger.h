@@ -26,7 +26,7 @@ class ADDR1
   public:
 	static uint16_t solveADDR(const char *name)
 	{
-		uint addr = 0;
+		uint8_t addr = 0;
 		uint16_t mult = 1;
 		for (uint8_t i = 0; i < 3; i++)
 		{
