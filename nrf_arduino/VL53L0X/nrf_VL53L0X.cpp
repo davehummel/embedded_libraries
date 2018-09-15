@@ -3,8 +3,9 @@
 // or paraphrased from the API source code, API user manual (UM2039), and the
 // VL53L0X datasheet.
 
-#include <dh_VL53L0X.h>
-#include <i2c_t3.h>
+#include <nrf_VL53L0X.h>
+#include <Wire.h>
+#include <delay.h>
 
 // Defines /////////////////////////////////////////////////////////////////////
 
@@ -33,7 +34,7 @@ VL53L0X::VL53L0X()
 {
 }
 
-void VL53L0X::setWire(i2c_t3 *_wire)
+void VL53L0X::setWire(TwoWire *_wire)
 {
   wire = _wire;
 }
