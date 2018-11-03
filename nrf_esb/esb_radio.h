@@ -49,13 +49,21 @@ public:
 
   uint32_t init(nrf_esb_mode_t p_mode);
 
+  uint32_t enableRX();
+
+  uint32_t disableRX();
+
   uint32_t switchModes(nrf_esb_mode_t p_mode);
 
   uint32_t transmit(uint8_t p_pipenum, uint8_t p_length, uint8_t *p_data, bool p_noack = false);
 
+  void flushTxQueue();
+
+  bool isIdle();
+
   void setReceivedListener(void (*p_listener)(nrf_esb_evt_t const *p_event));
 
-  void setTXCompleteListener(void (*p_listener)(nrf_esb_evt_t const *p_event));
+  void setTransmittedListener(void (*p_listener)(nrf_esb_evt_t const *p_event));
 
   void handleEvent(nrf_esb_evt_t const *p_event);
 

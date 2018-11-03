@@ -36,16 +36,6 @@ uint32_t EsbRadio::init(nrf_esb_mode_t p_mode) {
   uint32_t status = NRF_SUCCESS;
   esb_config.mode = p_mode;
   status = nrf_esb_init(&esb_config);
-  if (status != NRF_SUCCESS)
-    return status;
-  if (p_mode == NRF_ESB_MODE_PRX) {
-    status = nrf_esb_start_rx();
-    if (status != NRF_SUCCESS) {
-      NRF_LOG_ERROR("Failed to start rx on init");
-      return status;
-    }
-  } else {
-  }
   return status;
 }
 
@@ -76,6 +66,18 @@ uint32_t EsbRadio::switchModes(nrf_esb_mode_t p_mode) {
   }
 }
 
+uint32_t EsbRadio::enableRX() {
+  return nrf_esb_start_rx();
+}
+
+uint32_t EsbRadio::disableRX() {
+  return nrf_esb_stop_rx();
+}
+
+bool EsbRadio::isIdle() {
+  return nrf_esb_is_idle();
+}
+
 uint32_t EsbRadio::transmit(uint8_t p_pipenum, uint8_t p_length, uint8_t *p_data, bool p_noack) {
 
   tx_payload.pipe = p_pipenum;
@@ -91,17 +93,21 @@ uint32_t EsbRadio::transmit(uint8_t p_pipenum, uint8_t p_length, uint8_t *p_data
   return err_code;
 }
 
+void EsbRadio::flushTxQueue() {
+  nrf_esb_flush_tx();
+}
+
 void EsbRadio::setReceivedListener(void (*p_listener)(nrf_esb_evt_t const *p_event)) { rxListener = p_listener; }
 
-void EsbRadio::setTXCompleteListener(void (*p_listener)(nrf_esb_evt_t const *p_event)) { txListener = p_listener; }
+void EsbRadio::setTransmittedListener(void (*p_listener)(nrf_esb_evt_t const *p_event)) { txListener = p_listener; }
 
 void EsbRadio::handleEvent(nrf_esb_evt_t const *p_event) {
   switch (p_event->evt_id) {
-  case NRF_ESB_EVENT_TX_SUCCESS:
+  case NRF_ESB_EVENT_TX_SUCCESS: {
     NRF_LOG_DEBUG("TX SUCCESS EVENT");
     if (txListener != 0)
       txListener(p_event);
-    break;
+  } break;
   case NRF_ESB_EVENT_TX_FAILED:
     NRF_LOG_DEBUG("TX FAILED EVENT");
     if (txListener != 0) {
