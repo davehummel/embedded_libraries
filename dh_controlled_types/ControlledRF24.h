@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include "RF24.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #define RF_SCAN_ID 692
 #define RF_SCAN_DELAY 100
@@ -70,6 +70,8 @@ class ControlledRF24 : public Controller::Controlled
 #ifdef DEBUG
 					Serial1.print("Got message on pipe");
 					Serial1.print(pipeNum - 1);
+					Serial1.print(" : ");
+					Serial1.print(letter);
 					Serial1.print(" [ ");
 					for (uint8_t a = 0; a < 9; a++)
 					{

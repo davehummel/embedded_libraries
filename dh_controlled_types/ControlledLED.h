@@ -69,7 +69,7 @@ public:
 						}else if (isDSC){
 							pinDisable(pID);
 					 }else{
-						 		pinMode(pID,OUTPUT);
+						  pinMode(pID,OUTPUT);
 						  digitalWrite(pID,LOW);
 						}
 					}

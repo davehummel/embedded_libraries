@@ -279,10 +279,10 @@ class Controller
 		virtual bool transmit(Logger *logger, uint32_t time, uint32_t id, char command[])
 		{
 #ifdef DEBUG
-			Serial.print("Outer Transmit :\n ID = ");
-			Serial.print(id);
-			Serial.print("\n command = ");
-			Serial.println(command);
+			Serial1.print("Outer Transmit :\n ID = ");
+			Serial1.print(id);
+			Serial1.print("\n command = ");
+			Serial1.println(command);
 #endif
 			uint16_t c = 0;
 			ADDRTYPE type;
@@ -322,12 +322,12 @@ class Controller
 				temp[1] = command[3 + i * 4];
 				temp[2] = command[4 + i * 4];
 #ifdef DEBUG
-				Serial.print("Creating addr");
-				Serial.print(temp);
-				Serial.print("\n n = ");
-				Serial.print(i);
-				Serial.print(" type = ");
-				Serial.println((int)type);
+				Serial1.print("Creating addr");
+				Serial1.print(temp);
+				Serial1.print("\n n = ");
+				Serial1.print(i);
+				Serial1.print(" type = ");
+				Serial1.println((int)type);
 #endif
 				addr1Array[i] = new ADDR1(temp, type);
 			}
@@ -366,14 +366,14 @@ class Controller
 		virtual bool transmit(Logger *logger, uint32_t time, uint32_t instID, uint8_t width, uint8_t length, ADDR1 **addr1Array, uint8_t addr2Offset)
 		{
 #ifdef DEBUG
-			Serial.print("Starting Transmit :\n ID = ");
-			Serial.print(instID);
-			Serial.print("\n width = ");
-			Serial.print(width);
-			Serial.print(" length = ");
-			Serial.print(length);
-			Serial.print(" offset = ");
-			Serial.println(addr2Offset);
+			Serial1.print("Starting Transmit :\n ID = ");
+			Serial1.print(instID);
+			Serial1.print("\n width = ");
+			Serial1.print(width);
+			Serial1.print(" length = ");
+			Serial1.print(length);
+			Serial1.print(" offset = ");
+			Serial1.println(addr2Offset);
 #endif
 			if (length == 0)
 				return false;
@@ -386,14 +386,14 @@ class Controller
 			for (uint8_t i = 0; i < width; i++)
 			{
 #ifdef DEBUG
-				Serial.print(".");
+				Serial1.print(".");
 				Serial.flush();
 #endif
 				if (type != addr1Array[i]->type)
 					return false;
 			}
 #ifdef DEBUG
-			Serial.print(".");
+			Serial1.print(".");
 			Serial.flush();
 #endif
 			uint32_t size = width * length;
@@ -438,8 +438,8 @@ class Controller
 			if (size > 65532) // might need to save space for the length encoding bytes
 				return false;
 #ifdef DEBUG
-			Serial.print("Starting Stream send. Size=");
-			Serial.println(size);
+			Serial1.print("Starting Stream send. Size=");
+			Serial1.println(size);
 #endif
 			logger->startStreamSend(size, id, instID);
 			// logger->print((uint8_t) type);
@@ -489,9 +489,9 @@ class Controller
 			if (remainder > 0)
 			{
 #ifdef DEBUG
-				Serial.print('X');
-				Serial.print(remainder);
-				Serial.print('X');
+				Serial1.print('X');
+				Serial1.print(remainder);
+				Serial1.print('X');
 #endif
 			}
 			return remainder == 0;
