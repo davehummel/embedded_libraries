@@ -330,6 +330,7 @@ class Controller
 				Serial1.println((int)type);
 #endif
 				addr1Array[i] = new ADDR1(temp, type);
+
 			}
 
 			c += width * 4;

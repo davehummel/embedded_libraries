@@ -26,8 +26,9 @@ class ADDR1
   public:
 	static uint16_t solveADDR(const char *name)
 	{
-		uint8_t addr = 0;
+		uint16_t addr = 0;
 		uint16_t mult = 1;
+
 		for (uint8_t i = 0; i < 3; i++)
 		{
 			if (name[i] < 'A')
@@ -140,10 +141,15 @@ class ADDR1
 	void getChars(char *chars)
 	{
 		uint16_t temp = addr;
+		
 		chars[0] = 'A' + temp % 26;
+	
 		temp /= 26;
+		
 		chars[1] = 'A' + temp % 26;
+		
 		temp /= 26;
+			
 		chars[2] = 'A' + temp % 26;
 	}
 

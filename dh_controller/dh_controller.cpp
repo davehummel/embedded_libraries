@@ -457,7 +457,6 @@ void Controller::parseBuffer(){
 		return;
 	}
 	if (inputBuffer[0] == 'S' ) {
-
 		char modID;
 
 
@@ -529,20 +528,20 @@ void Controller::parseBuffer(){
 			error.finished(lastProcessedMSTime,ErrorLogger::OS_PARSER);
 			return;
 		}
-		#ifdef DEBUG
-		Serial.print("Scheduling");
+		#ifdef DEBUG 
+		Serial1.print("Scheduling");
 		if (style == READ){
-			Serial.print(" R:");
+			Serial1.print(" R:");
 		} else if (style == WRITE){
 			Serial.print(" W:");
 		} else {
 			Serial.print(":");
 		}
-		Serial.print(modID);
-		Serial.print(" ");
-		Serial.print(id);
-		Serial.print(" ");
-		Serial.println(command);
+		Serial1.print(modID);
+		Serial1.print(" ");
+		Serial1.print(id);
+		Serial1.print(" ");
+		Serial1.println(command);
 		#endif
 
 			schedule(id, timeDelay, timeInterval, false, runCount, command, modID, style);
